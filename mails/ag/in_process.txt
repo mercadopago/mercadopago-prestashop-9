@@ -1,0 +1,13 @@
+Hola {firstname} {lastname},
+
+Pedido {order_name} - Pago en revisión.
+
+El pedido {order_name} fue procesado con éxito. En menos de 2 días hábiles recibirá una notificación por correo electrónico si fue confirmado o si necesitamos más información.
+
+Puede revisar su pedido y descargar su factura en la sección "Historial de Pedidos" haciendo clic en "Mi cuenta" de su cuenta.
+
+Si tiene una cuenta de invitado, puede seguir su pedido a través del enlace: {guest_tracking_url}
+
+{shop_name} - {shop_url}
+
+{shop_url} powered by PrestaShop&trade;

@@ -1,0 +1,19 @@
+<div class="mp-localization-container">
+    <div class="mp-localization-banner">
+        <div class="mp-localization-img">
+            <img src="https://http2.mlstatic.com/storage/cpp/static-files/81770e7a-3623-44c1-a374-f7664486c533.png"
+                 alt="{{ imgAlt }}" />
+        </div>
+        <div class="mp-localization-form">
+            <h4>{{ title }}</h4>
+            <p>{{ description }}</p>
+            <select name="MERCADOPAGO_COUNTRY_LINK" class="mp-country-select form-control">
+                {% for country in countries %}
+                    <option value="{{ country.id }}"{% if country.id == currentCountry %} selected{% endif %}>
+                        {{- country.name -}}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+</div>

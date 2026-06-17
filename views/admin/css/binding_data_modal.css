@@ -1,0 +1,195 @@
+/**
+ * Binding Data Modal CSS
+ * Styles for the linking process details modal
+ */
+
+.mp-binding-data-modal {
+    display: none;
+    position: fixed;
+    z-index: 99999;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #00000077;
+    justify-content: center;
+    align-items: center;
+    font-family:
+        'Proxima Nova',
+        -apple-system,
+        'Helvetica Neue',
+        Helvetica,
+        'Roboto',
+        Arial,
+        sans-serif;
+}
+
+.mp-binding-data-modal-content {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    background-color: #FFFFFF;
+    border-radius: 8px;
+    padding: 48px;
+    width: 85%;
+}
+
+.mp-binding-data-modal-head {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+.mp-binding-data-modal-head-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.mp-binding-data-modal-head-title h2 {
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 35px;
+    color: #1A1A1A;
+    margin: 0;
+}
+
+.mp-binding-data-modal-head p {
+    margin: 0;
+}
+
+.mp-close-icon {
+    width: 14px;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.mp-binding-data-modal-head-title p {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 20px;
+    color: #000000E5;
+    width: 95%;
+}
+
+.mp-binding-data-modal-body {
+    display: flex;
+    gap: 24px;
+    padding: 32px;
+    border: 1px solid #9B9B9B4D;
+    border-radius: 6px;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.mp-binding-data-modal-body h4 {
+    margin: 0;
+    color: #000000E5;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 25px;
+}
+
+.mp-binding-data-modal-body p {
+    margin: 0;
+}
+
+.mp-binding-data-modal-body-app-name span {
+    color: #000000E5;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 20px;
+}
+
+.mp-binding-data-modal-body-prod-credentials span, .mp-binding-data-modal-body-test-credentials span {
+    color: #0000008C;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 20px;
+    text-align: left;
+}
+
+.mp-binding-data-modal-body-app-name {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+}
+
+.mp-eye-icon {
+    width: 15px;
+    height: 10px;
+    cursor: pointer;
+    margin-left: 16px;
+}
+
+.mp-access-token span {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 20px;
+    color: #000000E5;
+}
+
+.mp-binding-data-modal-body-prod-credentials {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    width: 47%;
+}
+
+.mp-binding-data-modal-body-prod-credentials h4, .mp-binding-data-modal-body-test-credentials h4 {
+    margin-bottom: 16px;
+}
+
+.mp-binding-data-modal-body-prod-credentials p, .mp-binding-data-modal-body-test-credentials p {
+    margin-top: 4px;
+}
+
+.mp-binding-data-modal-body-test-credentials {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    width: 48%;
+}
+
+.mp-binding-data-modal-footer {
+    align-self: center;
+}
+
+.mp-binding-data-modal-footer span {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 20px;
+    color: #0000008C;
+}
+
+.mp-binding-data-modal-footer a {
+    color: #3483FA;
+    text-decoration: none;
+}
+
+@media (max-width: 768px) {
+    .mp-binding-data-modal-content {
+        width: 65%;
+        height: 75vh;
+        overflow: scroll;
+    }
+
+    .mp-binding-data-modal-body {
+        justify-content: center;
+    }
+    
+    .mp-binding-data-modal-body-prod-credentials {
+        width: 100%;
+    }
+    
+    .mp-binding-data-modal-body-test-credentials {
+        width: 100%;
+    }
+
+    .mp-access-token {
+        word-wrap: break-word;
+    }
+}

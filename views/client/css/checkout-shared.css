@@ -1,0 +1,131 @@
+/* Shared styles for all MercadoPago checkout methods */
+
+/* Links */
+
+.mp-link {
+    color: #3483FA !important;
+    font-size: 14px;
+    cursor: pointer;
+    user-select: none;
+    text-decoration: none !important;
+}
+
+.mp-link:hover {
+    color: #1a8196 !important;
+}
+
+/* Payment method logos */
+
+.mp-payment-methods-container {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-left: -8px;
+    margin-bottom: 32px;
+}
+
+.mp-payment-methods-container > div {
+    margin: 0 0 8px 8px;
+}
+
+.mp-payment-method-logo-container img {
+    width: 32px !important;
+    height: 24px !important;
+}
+
+.mp-payment-method-logo-image {
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100% !important;
+    position: inherit !important;
+    float: none !important;
+    margin: 0 !important;
+    font-size: 10px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+/* Utility classes */
+
+.mp-pt-15 {
+    padding-top: 15px !important;
+}
+
+.mp-pt-20 {
+    padding-top: 20px !important;
+}
+
+.mp-pb-5 {
+    padding-bottom: 5px !important;
+}
+
+.mp-pb-10 {
+    padding-bottom: 10px !important;
+}
+
+.mp-pb-20 {
+    padding-bottom: 20px !important;
+}
+
+.mp-px-0 {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+.mp-pl-0 {
+    padding-left: 0 !important;
+}
+
+.mp-pr-0 {
+    padding-right: 0 !important;
+}
+
+.mp-pt-0 {
+    padding-top: 0 !important;
+}
+
+.mp-pointer {
+    cursor: pointer !important;
+}
+
+.mp-hidden {
+    display: none !important;
+}
+
+/* Form controls (shared across payment methods) */
+
+.mp-form-control {
+    padding: 0.5rem 0.5rem;
+    background-color: #ffffff !important;
+}
+
+.mp-select {
+    border-radius: 0 !important;
+}
+
+.mp-required {
+    color: #f04449 !important;
+    font-size: 18px !important;
+    font-weight: bold;
+    font-family: 'Merriweather, Georgia';
+}
+
+.mp-form-control-error {
+    border: 2px solid #f04449 !important;
+}
+
+/* Payment option label alignment */
+
+body#checkout section.checkout-step .payment-options label {
+    text-align: left !important;
+}
+
+/* Cancels the margin-left: 46px that PrestaShop injects into the
+   #payment-option-X-additional-information wrapper around our checkout forms. */
+[id^="payment-option-"][id$="-additional-information"]:has(.mp-checkout-form),
+[id^="payment-option-"][id$="-additional-information"]:has(.mp-checkout-pix),
+[id^="payment-option-"][id$="-additional-information"]:has(.mp-checkout-preference) {
+    margin-left: 0 !important;
+}
+

@@ -1,0 +1,29 @@
+<div class="mercadopago-payment-methods-tabs" style="margin-top: 30px;">
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="active">
+            <a href="#tab-checkout-pro" role="tab" data-toggle="tab">{{ l('CHECKOUT PRO') }}</a>
+        </li>
+        <li>
+            <a href="#tab-custom-checkout" role="tab" data-toggle="tab">{{ l('CARD CHECKOUT') }}</a>
+        </li>
+        {% if countryCode == 'mlb' %}
+        <li>
+            <a href="#tab-pix-checkout" role="tab" data-toggle="tab">{{ l('PIX') }}</a>
+        </li>
+        {% endif %}
+        {% if countryCode == 'mco' %}
+        <li>
+            <a href="#tab-pse-checkout" role="tab" data-toggle="tab">{{ l('PSE') }}</a>
+        </li>
+        {% endif %}
+        {% if countryCode == 'mpe' %}
+        <li>
+            <a href="#tab-yape-checkout" role="tab" data-toggle="tab">{{ l('YAPE') }}</a>
+        </li>
+        {% endif %}
+        <li>
+            <a href="#tab-ticket-boleto" role="tab" data-toggle="tab">{{ l('TICKET CHECKOUT') }}</a>
+        </li>
+    </ul>
+    <div class="tab-content">
+

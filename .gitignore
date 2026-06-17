@@ -1,0 +1,168 @@
+# ===========================================
+# DEPENDÊNCIAS
+# ===========================================
+vendor/
+node_modules/
+package-lock.json
+yarn.lock
+
+# ===========================================
+# ARQUIVOS DE AMBIENTE
+# ===========================================
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+.env.*.local
+
+# ===========================================
+# IDEs E EDITORES
+# ===========================================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.settings/
+.classpath
+
+# ===========================================
+# ARQUIVOS DO SISTEMA
+# ===========================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# ===========================================
+# LOGS E ARQUIVOS TEMPORÁRIOS
+# ===========================================
+*.log
+logs/
+tmp/
+temp/
+cache/
+*.tmp
+*.temp
+
+# ===========================================
+# PHP ESPECÍFICO
+# ===========================================
+*.php~
+*.php.bak
+*.php.swp
+*.php.swo
+.phpunit.result.cache
+phpunit.xml.bak
+
+# ===========================================
+# PRESTASHOP ESPECÍFICO
+# ===========================================
+config/settings.inc.php
+config/defines.inc.php
+config/autoload.php
+modules/*/config.xml
+modules/*/config_*.xml
+# This repo IS the module root, so PrestaShop generates config.xml / config_<iso>.xml here on install
+/config.xml
+/config_*.xml
+var/cache/
+var/logs/
+var/sessions/
+
+# ===========================================
+# MERCADO PAGO ESPECÍFICO
+# ===========================================
+mercadopago.log
+mp_*.log
+webhook_*.log
+transaction_*.log
+
+# ===========================================
+# BUILD E DISTRIBUIÇÃO
+# ===========================================
+build/
+dist/
+out/
+*.zip
+*.tar.gz
+*.tgz
+
+# ===========================================
+# TESTES E COBERTURA
+# ===========================================
+coverage/
+.nyc_output/
+*.lcov
+phpunit.xml
+.phpunit.cache/
+
+# ===========================================
+# CACHE E OTIMIZAÇÃO
+# ===========================================
+.cache/
+.parcel-cache/
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
+.php_cs.cache
+.php-cs-fixer.cache
+
+# ===========================================
+# DOCKER (se aplicável)
+# ===========================================
+docker-compose.override.yml
+.dockerignore
+
+# ===========================================
+# BACKUP E ARQUIVOS DE DESENVOLVIMENTO
+# ===========================================
+*.backup
+*.bak
+*.old
+*.orig
+*.rej
+*.sql
+*.sqlite
+*.db
+
+# ===========================================
+# ARQUIVOS DE CONFIGURAÇÃO LOCAL
+# ===========================================
+config/local.php
+config/dev.php
+config/test.php
+
+# ===========================================
+# MODELOS DE PR ESPECÍFICOS DE BRANCH
+# ===========================================
+.github/*_PR_DESCRIPTION.md
+
+# ===========================================
+# SCRIPTS DE DESENVOLVIMENTO
+# ===========================================
+clean_mercadopago_config.sh
+
+# ===========================================
+# MUTAGEN (sincronização local → remoto)
+# ===========================================
+mutagen.yml
+mutagen.yml.lock
+
+# ===========================================
+# DOCUMENTAÇÃO LOCAL
+# ===========================================
+docs/
+
+# ===========================================
+# MUTAGEN
+# ===========================================
+mutagen.yml
+mutagen.yml.lock

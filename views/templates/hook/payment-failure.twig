@@ -1,0 +1,16 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="alert alert-danger alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                {% if redirect_message is not empty %}
+                    {{ redirect_message }}
+                {% else %}
+                    {{ l('Oops! An error occurred during payment. Please try again.') }}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>

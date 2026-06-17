@@ -1,0 +1,156 @@
+/* MercadoPago Ticket Payment Page Styles */
+
+.mp-ticket-payment {
+  display: flex;
+  justify-content: center;
+  padding: 16px 0 32px 0;
+}
+
+.mp-ticket-payment-inner {
+  max-width: 604px;
+  width: 100%;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  padding: 32px;
+}
+
+/* Header */
+
+.mp-ticket-payment-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.mp-ticket-payment-check {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: #00a650;
+  color: #ffffff;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.mp-ticket-payment-title {
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 28px;
+  margin: 0;
+  color: #333333;
+}
+
+/* Divider */
+
+.mp-ticket-payment-divider {
+  margin: 20px 0;
+  border: 0;
+  border-top: 1px solid #e6e6e6;
+}
+
+/* Subtitle */
+
+.mp-ticket-payment-subtitle {
+  font-size: 15px;
+  line-height: 22px;
+  color: #666666;
+  margin: 0 0 24px 0;
+  text-align: center;
+}
+
+/* Action buttons */
+
+.mp-ticket-payment-actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.mp-ticket-btn-view {
+  background-color: #ffffff !important;
+  border: 1px solid #cccccc !important;
+  color: #333333 !important;
+  font-weight: 600;
+  padding: 10px 24px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.mp-ticket-btn-view:hover {
+  background-color: #f5f5f5 !important;
+  color: #333333 !important;
+  text-decoration: none;
+}
+
+/* Barcode section */
+
+.mp-ticket-payment-barcode {
+  margin-bottom: 4px;
+}
+
+.mp-ticket-payment-barcode-row {
+  display: flex;
+  align-items: center;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+.mp-ticket-payment-barcode-row .mp-ticket-code-input {
+  flex: 1;
+  padding: 12px 14px;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  color: #333333;
+  background: transparent;
+  font-family: monospace;
+}
+
+.mp-ticket-payment-barcode-row .mp-ticket-copy-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-left: 1px solid #e0e0e0;
+  background: transparent;
+  color: #666666;
+  cursor: pointer;
+  font-size: 18px;
+  padding: 0;
+  border-radius: 0;
+}
+
+.mp-ticket-payment-barcode-row .mp-ticket-copy-btn:hover {
+  background: #f5f5f5;
+}
+
+
+/* Mobile */
+
+@media (max-width: 767.98px) {
+  .mp-ticket-payment-inner {
+    padding: 20px;
+  }
+
+  .mp-ticket-payment-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .mp-ticket-btn-view {
+    width: 100%;
+    text-align: center;
+  }
+}

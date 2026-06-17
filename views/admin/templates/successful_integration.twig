@@ -1,0 +1,65 @@
+<div class="panel">
+    <div class="panel-heading">
+        <i class="{{ icon }}"></i>
+        {{ title }}
+    </div>
+    <div class="form-wrapper">
+        <div class="panel-body">
+            {% if description %}
+                <div class="alert alert-info">
+                    {{ description }}
+                </div>
+            {% endif %}
+            
+            <div id='successful-integration' class='mp-successful-integration-container'>
+                <div class='row'>
+                    <div class='mp-successful-integration-banner'>
+                        <div class='mp-successful-integration-banner-text'>
+                            {% if seller_experience_status == 'new' %}
+                                <h4>{{ l('Well done! You linked your Mercado Pago account to receive the money from your sales') }}</h4>
+                                <p>{{ l('Now, finish setting up the sections below to start selling.') }}</p>
+                            {% endif %}
+                            {% if seller_experience_status == 'old' %}
+                                <h4>{{ l('You linked your Mercado Pago account to receive the money from your sales') }}</h4>
+                                <p>{{ l('If you have not done so yet, finish setting up the sections below to start selling.') }}</p>
+                            {% endif %}
+                            {% if seller_experience_status == 'updated' %}
+                                <h4>{{ l('You updated your Mercado Pago account to receive the money from your sales') }}</h4>
+                                <p>{{ l('Keep selling as usual.') }}</p>
+                            {% endif %}
+                        </div>
+                        <div class='mp-vertical-row'></div>
+                        <div class='mp-successful-integration-banner-store-details'>
+                            <div class='mp-store-data'>
+                                <div class='mp-store-data-details'>
+                                    <div class='mp-store-data-image'>
+                                        <img src='https://http2.mlstatic.com/storage/cpp/static-files/cd0e9860-52a1-4b6f-bd6a-f3dce26f00a9.png' alt='Mercado Pago account' />
+                                    </div>
+                                    <div class='mp-store-data-text'>
+                                        <h4>{{ mp_integration_user_name|escape('html') }}</h4>
+                                        <span>{{ mp_account_email|escape('html') }}</span>
+                                        <span><div class='mp-store-data-status'></div>{{ l('Linked account') }}</span>
+                                    </div>
+                                </div>
+                                <div class='mp-store-data-actions'>
+                                    <button
+                                        id='switch-account-btn'
+                                        type='button'
+                                        data-redirect-url="{{ iframe_url|escape('html_attr') }}"
+                                    >
+                                        {{ l('Switch account') }}
+                                    </button>
+                                </div>
+                            </div>
+                            <span>
+                                {{ l('For more information, check the') }}
+                                <a id='binding-data-link'>{{ l('linking process details') }}</a>.
+                            </span>  
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

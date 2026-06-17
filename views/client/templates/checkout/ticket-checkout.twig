@@ -1,0 +1,318 @@
+{#
+ * 2007-2025 PrestaShop.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@prestashop.com so you can send you a copy immediately.
+ *
+ * @copyright Copyright (c) MercadoPago
+ * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ #}
+
+<link rel="stylesheet" href="{{ module_dir }}views/client/css/ticket-checkout.css">
+
+<form action="{{ action_url }}" id="mp-ticket-checkout" class="mp-checkout-form" method="POST">
+    <div class="row mp-container-ticket">
+
+        <input type="hidden" id="mp-site-id" value="{{ site_id }}">
+
+        <!-- MLB: CPF/CNPJ document type selection -->
+        {% if site_id|upper == 'MLB' %}
+            <div class="col-xs-12 col-md-12 col-12 mp-px-0">
+                <div class="form-group mp-pb-30">
+                    <div class="col-md-4 col-4 col-xs-6 mp-pl-0">
+                        <input class="form-check-input mp-checkbox" type="radio" value="CPF"
+                               id="mp-cpf" name="mercadopago_ticket[docType]" checked>
+                        <label class="form-check-label mp-fl-left mp-pl-10" for="mp-cpf">
+                            {{ l('Individual') }}
+                        </label>
+                    </div>
+                    <div class="col-md-4 col-4 col-xs-6">
+                        <input class="form-check-input mp-checkbox" type="radio" value="CNPJ"
+                               id="mp-cnpj" name="mercadopago_ticket[docType]">
+                        <label class="form-check-label mp-fl-left mp-pl-10" for="mp-cnpj">
+                            {{ l('Legal Entity') }}
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MLB: Name fields -->
+            <div class="col-xs-12 col-md-12 col-12 mp-px-0">
+                <div class="form-group">
+
+                    <!-- Input firstname / company name -->
+                    <div class="col-md-4 col-4 col-xs-12 mp-pb-10 mp-pl-0" id="mp-box-firstname">
+                        <label id="mp-firstname-label" class="mp-pb-5">
+                            {{ l('First and Last Name') }} <em class="mp-required">*</em>
+                        </label>
+                        <label id="mp-socialname-label" class="mp-pb-5">
+                            {{ l('Company Name') }} <em class="mp-required">*</em>
+                        </label>
+                        <input id="mp-firstname" name="mercadopago_ticket[firstname]" type="text"
+                               class="form-control mp-form-control" value="{{ firstname }}"
+                               autocomplete="off" data-checkout="mp-firstname"/>
+                        <small class="mp-erro-febraban" data-main="#mp-firstname" id="mp-error-firstname">
+                            {{ l('You must inform your name') }}
+                        </small>
+                    </div>
+
+                    <!-- Input lastname -->
+                    <div class="col-md-4 col-4 col-xs-12 mp-pb-10" id="mp-box-lastname">
+                        <label class="mp-pb-5">
+                            {{ l('Last Name') }} <em class="mp-required">*</em>
+                        </label>
+                        <input id="mp-lastname" name="mercadopago_ticket[lastname]" type="text"
+                               class="form-control mp-form-control" value="{{ lastname }}"
+                               autocomplete="off" data-checkout="mp-lastname"/>
+                        <small class="mp-erro-febraban" data-main="#mp-lastname" id="mp-error-lastname">
+                            {{ l('You must inform last name') }}
+                        </small>
+                    </div>
+
+                    <!-- Input CPF/CNPJ number -->
+                    <div class="col-md-4 col-4 col-xs-12 mp-pb-10 mp-pr-0">
+                        <label id="mp-cpf-label" class="mp-pb-5">
+                            {{ l('CPF') }} <em class="mp-required">*</em>
+                        </label>
+                        <label id="mp-cnpj-label" class="mp-pb-5">
+                            {{ l('CNPJ') }} <em class="mp-required">*</em>
+                        </label>
+                        <input id="mp-doc-number" name="mercadopago_ticket[docNumber]" type="text"
+                               class="form-control mp-form-control" maxlength="14"
+                               autocomplete="off" data-checkout="mp-doc-number"/>
+                        <small class="mp-erro-febraban" data-main="#mp-doc-number" id="mp-error-docnumber">
+                            {{ l('The document must be valid') }}
+                        </small>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- MLB: Address fields -->
+            <div class="col-xs-12 col-md-12 col-12 mp-px-0">
+                <div class="form-group">
+
+                    <!-- Input street address -->
+                    <div class="col-md-8 col-8 col-xs-8 mp-pb-20 mp-pl-0">
+                        <label class="mp-pb-5">
+                            {{ l('Address') }} <em class="mp-required">*</em>
+                        </label>
+                        <input id="mp-address" name="mercadopago_ticket[address]" type="text"
+                               class="form-control mp-form-control" value="{{ address }}"
+                               autocomplete="off" data-checkout="mp-address"/>
+                        <small class="mp-erro-febraban" data-main="#mp-address" id="mp-error-address">
+                            {{ l('You must inform address') }}
+                        </small>
+                    </div>
+
+                    <!-- Input address number -->
+                    <div class="col-md-4 col-4 col-xs-4 mp-pb-20 mp-pr-0">
+                        <label class="mp-pb-5">
+                            {{ l('Number') }} <em class="mp-required">*</em>
+                        </label>
+                        <input id="mp-number" name="mercadopago_ticket[number]" type="text"
+                               class="form-control mp-form-control"
+                               inputmode="numeric"
+                               autocomplete="off" data-checkout="mp-number"/>
+                        <small class="mp-erro-febraban" data-main="#mp-number" id="mp-error-number">
+                            {{ l('You must inform address number') }}
+                        </small>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- MLB: City, state and postal code -->
+            <div class="col-xs-12 col-md-12 col-12 mp-px-0">
+                <div class="form-group">
+
+                    <!-- Input city -->
+                    <div class="col-md-4 col-4 col-xs-12 mp-pb-20 mp-pl-0">
+                        <label class="mp-pb-5">
+                            {{ l('City') }} <em class="mp-required">*</em>
+                        </label>
+                        <input id="mp-city" name="mercadopago_ticket[city]" type="text"
+                               class="form-control mp-form-control" value="{{ city }}"
+                               autocomplete="off" data-checkout="mp-city"/>
+                        <small class="mp-erro-febraban" data-main="#mp-city" id="mp-error-city">
+                            {{ l('You must inform city') }}
+                        </small>
+                    </div>
+
+                    <!-- Select state -->
+                    <div class="col-md-4 col-4 col-xs-12 mp-pb-20">
+                        <label class="mp-pb-5">
+                            {{ l('State') }} <em class="mp-required">*</em>
+                        </label>
+                        <select id="mp-state" name="mercadopago_ticket[state]"
+                                class="form-control mp-form-control mp-select mp-pointer"
+                                data-checkout="mp-state">
+                            {% set states = {
+                                'AC': 'Acre', 'AL': 'Alagoas', 'AP': 'Amapá', 'AM': 'Amazonas',
+                                'BA': 'Bahia', 'CE': 'Ceará', 'DF': 'Distrito Federal',
+                                'ES': 'Espírito Santo', 'GO': 'Goiás', 'MA': 'Maranhão',
+                                'MT': 'Mato Grosso', 'MS': 'Mato Grosso do Sul', 'MG': 'Minas Gerais',
+                                'PA': 'Pará', 'PB': 'Paraíba', 'PR': 'Paraná', 'PE': 'Pernambuco',
+                                'PI': 'Piauí', 'RJ': 'Rio de Janeiro', 'RN': 'Rio Grande do Norte',
+                                'RS': 'Rio Grande do Sul', 'RO': 'Rondônia', 'RR': 'Roraima',
+                                'SC': 'Santa Catarina', 'SP': 'São Paulo', 'SE': 'Sergipe',
+                                'TO': 'Tocantins'
+                            } %}
+                            <option value="">{{ l('Select state') }}</option>
+                            {% for code, name in states %}
+                                <option value="{{ code }}"{% if state == code %} selected{% endif %}>{{ name }}</option>
+                            {% endfor %}
+                        </select>
+                        <small class="mp-erro-febraban" data-main="#mp-state" id="mp-error-state">
+                            {{ l('You must inform state') }}
+                        </small>
+                    </div>
+
+                    <!-- Input postal code -->
+                    <div class="col-md-4 col-4 col-xs-12 mp-pb-20 mp-pr-0">
+                        <label class="mp-pb-5">
+                            {{ l('Postal Code') }} <em class="mp-required">*</em>
+                        </label>
+                        <input id="mp-zipcode" name="mercadopago_ticket[zipcode]" type="text"
+                               class="form-control mp-form-control" value="{{ zipcode }}"
+                               autocomplete="off" data-checkout="mp-zipcode"/>
+                        <small class="mp-erro-febraban" data-main="#mp-zipcode" id="mp-error-zipcode">
+                            {{ l('You must inform zip code') }}
+                        </small>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Message indicating that fields marked with * are required -->
+            <div class="col-md-12 col-xs-12 col-12 mp-px-0">
+                <p class="mp-all-required">
+                    {{ l('Complete all fields, they are mandatory!') }}
+                </p>
+            </div>
+        {% endif %}
+
+        <!-- MLU: CI document fields -->
+        {% if site_id|upper == 'MLU' %}
+            <div class="col-xs-12 col-md-12 col-12 mp-frame-title">
+                <h3 class="mp-title-custom-checkout">
+                    {{ l('Enter your document number') }}
+                </h3>
+            </div>
+
+            <div class="col-xs-12 col-md-12 col-12 mp-px-0">
+                <div class="form-group">
+
+                    <!-- Select document type -->
+                    <div class="col-md-4 col-4 mp-pb-20 mp-pl-0">
+                        <label for="mp-doc-type" class="mp-pb-5">{{ l('Type') }}</label>
+                        <select id="mp-doc-type" name="mercadopago_ticket[docType]"
+                                class="form-control mp-form-control mp-select mp-pointer">
+                            <option value="CI" selected>{{ l('CI') }}</option>
+                        </select>
+                    </div>
+
+                    <!-- Input document number -->
+                    <div class="col-md-8 col-8 mp-pb-20 mp-pr-0">
+                        <label for="mp-doc-number" class="mp-pb-5">{{ l('Document number') }}</label>
+                        <input id="mp-doc-number" name="mercadopago_ticket[docNumber]" type="text"
+                               class="form-control mp-form-control" maxlength="11"
+                               autocomplete="off" data-checkout="mp-doc-number"/>
+                        <small class="mp-erro-efetivo-mlu" data-main="#mp-doc-number" id="mp-error-docnumber">
+                            {{ l('The document must be valid') }}
+                        </small>
+                    </div>
+
+                </div>
+            </div>
+        {% endif %}
+
+        <!-- Title payment method selection -->
+        <div class="col-xs-12 col-md-12 col-12 mp-frame-title">
+            <h3 class="mp-title-ticket-checkout">
+                {{ l('Please, select the issuer of face payments with which you want to make the purchase:') }}
+            </h3>
+        </div>
+
+        <!-- Payment methods list -->
+        {# Methods with `payment_places` (paycash) are expanded inline so each network
+           appears as a sibling radio next to other methods (matches the legacy v1 UX). #}
+        {% if payment_methods is not empty %}
+            <div class="form-group col-xs-12 col-md-12 col-12 mp-px-0">
+                {% for method in payment_methods %}
+                    {% if method.payment_places|default([]) is not empty %}
+                        {% for place in method.payment_places %}
+                            <div class="col-md-6 col-6 col-xs-12 mp-px-0 mp-pt-15">
+                                <div class="form-check mp-form-check mp-form-item">
+                                    <input id="mp-method-{{ method.id }}-{{ place.payment_option_id }}"
+                                           name="mercadopago_ticket[paymentMethodId]"
+                                           class="form-check-input mp-checkbox"
+                                           value="{{ method.id }}"
+                                           data-payment-type="{{ method.type }}"
+                                           data-payment-option-id="{{ place.payment_option_id }}"
+                                           type="radio"{% if place.is_default|default(false) %} checked{% endif %}>
+                                    <label class="mp-ticket-option-label" for="mp-method-{{ method.id }}-{{ place.payment_option_id }}">
+                                        <div class="mp-payment-method-logo-container">
+                                            <img class="mp-payment-method-logo-image"
+                                                 src="{{ place.thumbnail|default(method.image) }}" alt="{{ place.name }}"/>
+                                        </div>
+                                        <span class="mp-text-ticket-tarjeta">{{ place.name }}</span>
+                                    </label>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="col-md-6 col-6 col-xs-12 mp-px-0 mp-pt-15">
+                            <div class="form-check mp-form-check mp-form-item">
+                                <input id="mp-method-{{ method.id }}"
+                                       name="mercadopago_ticket[paymentMethodId]"
+                                       class="form-check-input mp-checkbox"
+                                       value="{{ method.id }}"
+                                       data-payment-type="{{ method.type }}"
+                                       type="radio"{% if method.is_default|default(false) %} checked{% endif %}>
+                                <label class="mp-ticket-option-label" for="mp-method-{{ method.id }}">
+                                    <div class="mp-payment-method-logo-container">
+                                        <img class="mp-payment-method-logo-image"
+                                             src="{{ method.image }}" alt="{{ method.name }}"/>
+                                    </div>
+                                    <span class="mp-text-ticket-tarjeta">{{ method.name }}</span>
+                                </label>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <!-- Terms and Conditions acceptance label -->
+        <div>
+            <p>
+                {{ l('By continuing, you agree to our ') }}
+                <a class="mp-link" href="{{ terms_url|default('#')|escape('html') }}" target="_blank" rel="noopener">
+                    {{ l('Terms and Conditions') }}
+                </a>
+            </p>
+        </div>
+
+    </div>
+
+    <!-- Hidden fields -->
+    <div id="mp-ticket-utilities">
+        <input type="hidden" name="mercadopago_ticket[paymentTypeId]" id="mp-payment-type-id">
+        <input type="hidden" name="mercadopago_ticket[paymentOptionId]" id="mp-payment-option-id">
+
+        {% if site_id|upper != 'MLB' and site_id|upper != 'MLU' %}
+            <input type="hidden" name="mercadopago_ticket[docType]" value="other">
+            <input type="hidden" name="mercadopago_ticket[docNumber]" value="0">
+        {% endif %}
+    </div>
+
+</form>
+

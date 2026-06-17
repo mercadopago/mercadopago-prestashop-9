@@ -1,0 +1,11 @@
+Hola {firstname} {lastname},
+
+El pago del pedido {order_name} en {shop_name} fue rechazado.
+
+Puede revisar su pedido y descargar su factura en la sección "Historial de Pedidos" haciendo clic en "Mi cuenta" de su cuenta.
+
+Si tiene una cuenta de invitado, puede seguir su pedido a través del enlace: {guest_tracking_url}
+
+{shop_name} - {shop_url}
+
+{shop_url} powered by PrestaShop&trade;

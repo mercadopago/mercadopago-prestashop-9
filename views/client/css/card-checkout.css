@@ -1,0 +1,181 @@
+/* MercadoPago Card Checkout Styles */
+
+/* PS9 compensates extra spacing added by the theme */
+#mp-custom-checkout {
+    padding-top: 10px !important;
+    padding-left: 35px !important;
+}
+
+/* Internal vertical spacing for payment card fields */
+.mp-container-payment-card {
+    padding: 0 0 10px;
+}
+
+/* Spacing between title and form content */
+.mp-frame-title {
+    padding: 10px 0 0;
+}
+
+.mp-title-custom-checkout {
+    padding: 0 0 10px;
+}
+
+/* Saved card payment button */
+.mp-wallet-button-container {
+    flex-direction: column;
+    padding: 24px 16px;
+    height: auto;
+    border: 1px solid rgb(0 0 0 / 10%);
+    border-radius: 6px;
+    margin-bottom: 15px;
+}
+
+.mp-wallet-title {
+    font-style: normal;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 20px;
+    display: flex;
+    align-items: center;
+    color: rgb(0 0 0 / 90%);
+}
+
+.mp-wallet-title p {
+    width: 100%;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 600;
+    color: #000000;
+    line-height: 22px;
+}
+
+.mp-wallet-description p {
+    width: 100%;
+    text-align: center;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 20px;
+    color: rgba(0, 0, 0, 0.9);
+    margin: 12px 0 16px;
+    padding: 0 15px;
+}
+
+/* Main Mercado Pago Wallet button */
+#mp-wallet-button {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 8px 12px;
+    background: #FFE600;
+    border-radius: 6px;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 20px;
+    text-align: center;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3ms ease-in-out;
+    width: 100%;
+    height: 48px;
+    gap: 8px;
+}
+
+#mp-wallet-button img {
+    width: 196px;
+    height: 28px;
+}
+
+#mp-wallet-button:hover {
+    background-color: #FBD100;
+    transition: all 0.3ms ease-in-out;
+}
+
+#mp-wallet-button:focus {
+    outline: none;
+    background-color: #FFE600 !important;
+    box-shadow:
+        0px 0px 0px 2px rgba(255, 255, 255, 1),
+        0px 0px 0px 5px rgba(65, 137, 230, 0.3),
+        0px 0px 0px 3px rgba(41, 104, 200, 1);
+}
+
+/* Spacing between promotion link for Argentina */
+.mp-separate-promotion-link {
+    padding: 0 5px 0 5px !important;
+}
+
+/* Payment method logos */
+
+.mp-frame-payments {
+    display: block;
+    background-color: #f5f5f5;
+    margin-top: 10px;
+    padding: 10px;
+}
+
+.mp-subtitle-payments {
+    font-size: 13px !important;
+    font-family: sans-serif !important;
+    color: #7a7a7a;
+    font-weight: 400;
+    padding: 0;
+    margin: 0 !important;
+    text-transform: uppercase;
+}
+
+/* Message indicating that fields marked with * are required */
+.mp-all-required {
+    color: #f04449 !important;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+/* Error states and validation */
+
+.mp-erro-form {
+    font-family: sans-serif !important;
+    font-weight: normal !important;
+    line-height: 1.29;
+    color: #f04449 !important;
+    padding-top: 5px;
+    padding-left: 2px;
+    display: none;
+}
+
+#id-doc-number-error {
+    color: #f04449 !important;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    display: none;
+}
+
+.show-error {
+    display: block !important;
+}
+
+.mp-m-col {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+.mp-small {
+    padding-left: 2px;
+}
+
+/* Argentina tax info */
+.mp-text-mla-tax {
+    font-size: 13px;
+    font-weight: 400;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 18px;
+    letter-spacing: normal;
+    color: #868686;
+    padding: 5px;
+}
+
+.mp-text-mla-tax b {
+    font-weight: 600;
+}

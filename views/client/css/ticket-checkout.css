@@ -1,0 +1,141 @@
+/* MercadoPago Ticket Checkout Styles */
+
+/* Ticket checkout container */
+
+.mp-pb-30 {
+  padding-bottom: 30px !important;
+}
+
+.mp-container-ticket {
+  padding: 10px 0 10px;
+}
+
+.mp-checkout-form {
+  padding-left: 25px !important;
+  padding-top: 20px !important;
+}
+
+/* Section titles */
+
+.mp-frame-title {
+  padding: 10px 0 0;
+}
+
+.mp-title-custom-checkout {
+  padding: 0 0 10px;
+}
+
+.mp-title-ticket-checkout {
+  padding: 0;
+}
+
+.mp-all-required {
+  color: #f04449 !important;
+  font-weight: bold;
+  font-size: 13px;
+}
+
+/* Checkboxes and radio buttons */
+
+.mp-checkbox {
+  position: relative !important;
+  margin-top: 0.15rem !important;
+  margin-left: 0 !important;
+  float: left;
+  cursor: pointer;
+}
+
+.form-check-input:checked {
+  accent-color: #3483fa;
+}
+
+.mp-form-check {
+  margin-bottom: 0 !important;
+}
+
+/* Terms and conditions */
+
+.mp-label-checkout-custom {
+  display: block;
+  text-align: center !important;
+  width: 100%;
+  font-size: 14px;
+  color: #232323;
+  margin-bottom: 0;
+}
+
+.mp-link-checkout-custom {
+  color: #3483fa !important;
+  font-size: 14px;
+  cursor: pointer;
+  user-select: none;
+}
+
+a.mp-link-checkout-custom {
+  text-decoration: none !important;
+}
+
+/* Payment method radio items */
+
+.mp-form-item {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.mp-ticket-option-label {
+  display: flex !important;
+  align-items: center;
+  justify-content: flex-start;
+  padding-left: 8px;
+  margin: 0 !important;
+  cursor: pointer;
+}
+
+.mp-text-ticket-tarjeta {
+  font-weight: bold;
+  padding-left: 10px;
+}
+
+/* Error messages */
+
+.mp-erro-febraban,
+.mp-erro-efetivo-mlu {
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.29;
+  letter-spacing: normal;
+  color: #f04449 !important;
+  display: none;
+  padding-top: 5px;
+  padding-left: 2px;
+}
+
+/* Hidden labels (toggled by JS for CPF/CNPJ) */
+
+#mp-socialname-label,
+#mp-cnpj-label {
+  display: none;
+}
+
+/* Mobile */
+
+@media (max-width: 767.98px) {
+  .mp-checkout-form {
+    padding: 0 25px 0 10px !important;
+  }
+
+  .mp-m-col {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  .mp-fl-left {
+    float: none !important;
+  }
+
+  .mp-m-px-0 {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+}

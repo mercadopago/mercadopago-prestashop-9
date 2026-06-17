@@ -1,0 +1,37 @@
+<div class="panel">
+    <div class="panel-heading">
+        <i class="{{ icon }}"></i>
+        {{ title }}
+    </div>
+    <div class="form-wrapper">
+        <div class="panel-body">
+            {% if description %}
+                <div class="alert alert-info">
+                    {{ description }}
+                </div>
+            {% endif %}
+            
+            <div id='integration-wrapper-error' class='mp-credentials-container'>
+                <div class='row'>
+                    <div class='mp-integration-wrapper-error-banner'>
+                        <div>
+                            <img src='https://http2.mlstatic.com/storage/cpp/static-files/7c9f2e59-4cb1-46bd-a4fa-70a50b898b72.png' alt='Integration error' />
+                        </div>
+                        <div class='mp-integration-wrapper-error-banner-info'>
+                            <div class='mp-integration-wrapper-error-banner-text'>
+                                <h4>{{ l('We cannot display your credentials at the moment') }}</h4>
+                                <p>{{ l('Please try again in a few minutes.') }}</p>
+                            </div>
+                            <div class='mp-integration-wrapper-error-banner-actions'>
+                                <button id="integration-wrapper-error-btn" type="button">
+                                    {{ l('Try again') }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

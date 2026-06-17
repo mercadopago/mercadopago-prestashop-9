@@ -1,0 +1,81 @@
+{#
+ * 2007-2025 PrestaShop.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@prestashop.com so we can send you a copy immediately.
+ *
+ * @copyright Copyright (c) MercadoPago
+ * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ #}
+
+<form action="{{ action_url }}" id="mp-yape-checkout" class="mp-checkout-form mp-checkout-yape" method="POST">
+
+    <div class="mp-yape-header">
+        <img class="mp-yape-logo" src="{{ module_dir }}views/client/img/logo_yape.png" width="64" height="64" alt="Yape" />
+        <h3 class="mp-yape-title">{{ text_title }}</h3>
+        <p class="mp-yape-instructions">{{ text_instructions }}</p>
+    </div>
+
+    <div class="mp-yape-fields">
+
+        <div class="mp-yape-field">
+            <label for="mp-yape-phone" class="mp-yape-label">
+                {{ text_phone_label }} <em class="mp-required">*</em>
+            </label>
+            <input
+                id="mp-yape-phone"
+                name="mercadopago_yape[phone]"
+                type="tel"
+                inputmode="numeric"
+                class="form-control mp-form-control mp-yape-input"
+                maxlength="9"
+                autocomplete="tel-national"
+                aria-describedby="mp-yape-phone-hint mp-yape-phone-error"
+                placeholder="999999999"
+            />
+            <small id="mp-yape-phone-hint" class="mp-yape-hint">{{ text_phone_hint }}</small>
+            <small class="mp-yape-error" id="mp-yape-phone-error" role="alert">{{ text_phone_error }}</small>
+        </div>
+
+        <div class="mp-yape-field">
+            <label for="mp-yape-otp" class="mp-yape-label">
+                {{ text_otp_label }} <em class="mp-required">*</em>
+            </label>
+            <input
+                id="mp-yape-otp"
+                name="mercadopago_yape[otp]"
+                type="text"
+                inputmode="numeric"
+                class="form-control mp-form-control mp-yape-input mp-yape-otp-input"
+                maxlength="6"
+                autocomplete="one-time-code"
+                aria-describedby="mp-yape-otp-hint mp-yape-otp-error"
+                placeholder="000000"
+            />
+            <small id="mp-yape-otp-hint" class="mp-yape-hint">{{ text_otp_hint }}</small>
+            <small class="mp-yape-error" id="mp-yape-otp-error" role="alert">{{ text_otp_error }}</small>
+        </div>
+
+    </div>
+
+    <p class="mp-yape-required-note">
+        <em class="mp-required">*</em> {{ text_required }}
+    </p>
+
+    <div class="mp-yape-terms">
+        <p class="mp-label-checkout-custom">
+            {{ text_terms }}
+            <a class="mp-link-checkout-custom" href="{{ terms_url|default('#') }}" target="_blank" rel="noopener">
+                {{ text_terms_link }}
+            </a>
+        </p>
+    </div>
+
+</form>

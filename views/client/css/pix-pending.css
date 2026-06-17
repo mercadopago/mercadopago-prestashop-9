@@ -1,0 +1,170 @@
+/* MercadoPago PIX Pending Page Styles */
+
+.mp-pix-pending {
+  display: flex;
+  justify-content: center;
+  padding: 16px 0 32px 0;
+}
+
+.mp-pix-confirmation {
+  max-width: 604px;
+  width: 100%;
+  border: 2px solid #e6e6e6;
+  background: #ffffff;
+  border-radius: 5px;
+  padding: 24px;
+}
+
+/* Header */
+
+.mp-pix-pending-title {
+  font-size: 20px;
+  line-height: 24px;
+  margin: 0 0 20px 0;
+}
+
+/* Amount + Expiration summary row */
+
+.mp-pix-pending-summary {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.mp-pix-box {
+  flex: 1;
+  padding: 16px 10px;
+  background: #f5f5f5;
+  border-radius: 5px;
+}
+
+.mp-pix-box-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.mp-pix-box-title {
+  font-size: 14px;
+  line-height: 17px;
+  color: rgba(0, 0, 0, 0.55);
+}
+
+.mp-pix-box-subtitle {
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 22px;
+  margin-top: 6px;
+}
+
+/* Generic section spacing */
+
+.mp-pix-section {
+  margin-bottom: 20px;
+}
+
+/* Subtitle text */
+
+.mp-pix-text-subtitle {
+  font-size: 16px;
+  line-height: 24px;
+  margin: 0;
+}
+
+.mp-pix-text-subtitle-item {
+  color: rgba(35, 35, 35, 0.55);
+  font-size: 14px;
+  line-height: 21px;
+  margin: 0;
+  padding-left: 20px;
+}
+
+/* QR Code */
+
+.mp-pix-qrcode-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.mp-pix-qrcode {
+  width: 200px;
+  height: 200px;
+}
+
+/* Copy-paste row */
+
+.mp-pix-copy-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.mp-pix-code-input {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  font-size: 13px;
+  color: rgba(0, 0, 0, 0.65);
+  background: #fafafa;
+  cursor: text;
+}
+
+.mp-pix-copy-btn {
+  white-space: nowrap;
+  background-color: #3483fa !important;
+  border-color: #3483fa !important;
+}
+
+/* Divider */
+
+.mp-pix-divider {
+  margin: 24px 0;
+  border: 0;
+  border-top: 1px solid #e6e6e6;
+}
+
+/* Footer info row */
+
+.mp-pix-pending-footer {
+  display: flex;
+  align-items: flex-start;
+  margin-top: 24px;
+}
+
+.mp-pix-pending-footer .mp-badge-info {
+  margin-right: 8px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+/* Desktop/Mobile toggling */
+
+.mp-pix-container-desktop {
+  display: block;
+}
+
+.mp-pix-container-mobile {
+  display: none;
+}
+
+/* Mobile */
+
+@media (max-width: 767.98px) {
+  .mp-pix-container-desktop {
+    display: none;
+  }
+
+  .mp-pix-container-mobile {
+    display: block;
+  }
+
+  .mp-pix-pending-summary {
+    flex-direction: column;
+  }
+
+  .mp-pix-copy-btn {
+    width: 100%;
+  }
+}

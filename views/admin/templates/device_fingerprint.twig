@@ -1,0 +1,47 @@
+<div style="display:none">
+    <form method="POST" id="mp-device-form">
+        <input type="hidden" name="submitMercadopagoDevice" value="1" />
+        <input type="hidden" id="device_fingerprint" name="device_fingerprint" value="" />
+    </form>
+</div>
+
+<script type="text/javascript">
+window.addEventListener('DOMContentLoaded', function () {
+    const mpScript = document.createElement("script");
+    mpScript.src = "https://www.mercadopago.com/v2/security.js";
+    mpScript.setAttribute("view", "checkout");
+    mpScript.setAttribute("output", "deviceId");
+    mpScript.async = true;
+    mpScript.defer = true;
+
+    let timeoutCounter = 0;
+    const maxTimeout = 50;
+
+    mpScript.onload = function () {
+        const waitForFingerprint = setInterval(() => {
+            timeoutCounter++;
+
+            if (window.MP_DEVICE_SESSION_ID) {
+                const input = document.getElementById("device_fingerprint");
+                if (input) {
+                    input.value = window.MP_DEVICE_SESSION_ID;
+
+                    const form = document.getElementById("mp-device-form");
+                    if (form) {
+                        form.submit();
+                    }
+                }
+                clearInterval(waitForFingerprint);
+            } else if (timeoutCounter >= maxTimeout) {
+                clearInterval(waitForFingerprint);
+            }
+        }, 200);
+    };
+
+    mpScript.onerror = function () {
+    };
+
+    document.body.appendChild(mpScript);
+});
+</script>
+

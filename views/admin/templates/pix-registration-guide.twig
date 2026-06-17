@@ -1,0 +1,21 @@
+{#
+    Pix key registration guide shown in the admin tab when the connected
+    Mercado Pago account has no Pix key registered.
+    All translatable strings are passed in as variables (see PixSettingsService::renderRegistrationGuide).
+#}
+<div class="panel mp-pix-registration-guide">
+    <div class="panel-heading"><i class="icon-cogs"></i> {{ title }}</div>
+    <p class="mp-pix-guide-intro">{{ intro }}<br>{{ steps_label }}</p>
+    <ol>
+        <li>{{ step1 }}</li>
+        <li>{{ step2_pre }} <b>{{ step2_profile }}</b> {{ step2_mid }} <b>{{ step2_keys }}</b></li>
+        <li>{{ step3 }}</li>
+        <li>{{ step4_pre }} <b>{{ step4_tab }}</b> {{ step4_post }}</li>
+    </ol>
+    <p><b>{{ important_label }}</b> {{ important_text }}</p>
+    <hr>
+    <ul>
+        <li>{{ bank_note }}</li>
+        <li>{{ support_pre }} <a href="https://www.mercadopago.com.br/developers/pt/support/center/contact" target="_blank" rel="noopener">{{ support_link }}</a></li>
+    </ul>
+</div>

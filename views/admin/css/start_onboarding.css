@@ -1,0 +1,126 @@
+/**
+* 2007-2025 PrestaShop
+*
+* NOTICE OF LICENSE
+*
+* This source file is subject to the Academic Free License (AFL 3.0)
+* that is bundled with this package in the file LICENSE.txt.
+* It is also available through the world-wide-web at this URL:
+* http://opensource.org/licenses/afl-3.0.php
+* If you did not receive a copy of the license and are unable to
+* obtain it through the world-wide-web, please send an email
+* to license@prestashop.com so we can send you a copy immediately.
+*
+* DISCLAIMER
+*
+* Do not edit or add to this file if you wish to upgrade PrestaShop to newer
+* versions in the future. If you wish to customize PrestaShop for your
+* needs please refer to http://www.prestashop.com for more information.
+*
+*  @author    PrestaShop SA <contact@prestashop.com>
+*  @copyright 2007-2025 PrestaShop SA
+*  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+*  International Registered Trademark & Property of PrestaShop SA
+*
+* Don't forget to prefix your containers with your own identifier
+* to avoid any conflicts with others containers.
+*/
+
+.mp-credentials-container {
+    max-width: none !important;
+}
+
+.mp-credentials-container div.row {
+    display: flex;
+    justify-content: center;
+}
+
+.mp-credentials-banner {
+    display: flex;
+    max-width: 664px;
+}
+
+.mp-credentials-banner>div:first-child {
+    display: flex;
+    align-items: center;
+    padding: 35px 0;
+}
+
+.mp-credentials-banner img {
+    width: 205px;
+    height: 124px;
+}
+
+.mp-credentials-banner-info {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    flex-direction: column;
+    font-family:
+        'Proxima Nova',
+        -apple-system,
+        'Helvetica Neue',
+        Helvetica,
+        'Roboto',
+        Arial,
+        sans-serif;
+}
+
+.mp-credentials-banner-text {}
+
+.mp-credentials-banner-text h4 {
+    font-weight: 600;
+    font-size: 18px !important;
+    color: #000000E5;
+    line-height: 22px;
+    margin-bottom: 8px;
+}
+
+.panel .form-wrapper .mp-credentials-banner-text p {
+    font-weight: 400;
+    font-size: 16px !important;
+    margin-bottom: 0;
+}
+
+.mp-credentials-banner-actions button {
+    border-radius: 5px;
+    background-color: #3483FA;
+    color: white;
+    padding: 9px 12px 7px 12px;
+    font-weight: 600;
+    text-align: center;
+    border: none;
+    font-size: 14px !important;
+    min-width: 132px;
+    height: 32px;
+    line-height: 16px;
+}
+
+.mp-credentials-banner-actions button:hover {
+    background-color: #32b3ff !important;
+}
+
+.mp-credentials-banner-actions button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+
+@media (max-width: 576px) {
+    .mp-credentials-banner {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        max-width: none !important;
+    }
+
+    .mp-credentials-banner-text {
+        text-align: center;
+    }
+
+    .mp-credentials-banner-info {
+        margin-left: 0 !important;
+        align-items: center;
+    }
+}
+

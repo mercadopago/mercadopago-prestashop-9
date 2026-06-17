@@ -1,0 +1,73 @@
+{#
+ * 2007-2025 PrestaShop.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@prestashop.com so we can send you a copy immediately.
+ *
+ * @copyright Copyright (c) MercadoPago
+ * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ #}
+
+<div id="mp-ticket-payment" class="mp-ticket-payment">
+    <div class="mp-ticket-payment-inner">
+
+        <div class="mp-ticket-payment-header">
+            <span class="mp-ticket-payment-check">&#10003;</span>
+            <h2 class="mp-ticket-payment-title">{{ l('Payment ready') }}</h2>
+        </div>
+
+        <hr class="mp-ticket-payment-divider">
+
+        <p class="mp-ticket-payment-subtitle">{{ l('Copy the digitable line below or view the ticket.') }}</p>
+
+        <div class="mp-ticket-payment-actions">
+            <a href="{{ ticket_url }}" target="_blank" rel="noopener" class="mp-ticket-btn-view">
+                {{ l('View ticket') }}
+            </a>
+        </div>
+
+        {% if digitable_line %}
+        <hr class="mp-ticket-payment-divider">
+
+        <div class="mp-ticket-payment-barcode">
+            <div class="mp-ticket-payment-barcode-row">
+                <input
+                    id="mp-ticket-input-code"
+                    type="text"
+                    class="mp-ticket-code-input"
+                    value="{{ digitable_line }}"
+                    readonly
+                />
+                <button id="mp-ticket-copy-code" class="mp-ticket-copy-btn">
+                    &#x2398;
+                </button>
+            </div>
+        </div>
+
+        <hr class="mp-ticket-payment-divider">
+        {% endif %}
+
+    </div>
+</div>
+
+<script type="text/javascript">
+    (function () {
+        var input = document.getElementById('mp-ticket-input-code');
+        var copyBtn = document.getElementById('mp-ticket-copy-code');
+
+        if (copyBtn && input) {
+            copyBtn.addEventListener('click', function () {
+                input.select();
+                input.setSelectionRange(0, 99999);
+                document.execCommand('copy');
+            });
+        }
+    }());
+</script>

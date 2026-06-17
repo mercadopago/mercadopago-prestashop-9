@@ -1,0 +1,15 @@
+{#
+    Shared collapsible "Advanced Configuration" header for payment method settings tabs.
+    Rendered hidden until positioned and shown by the method's settings JS.
+    Variables:
+      - header_id, desc_id, plus_id, less_id: unique IDs per payment method
+      - advanced_title, advanced_desc: translatable strings (passed from each SettingsService)
+#}
+<div class="mp-panel-advanced-config" id="{{ header_id }}" style="display:none">
+    <i class="icon-cogs"></i> {{ advanced_title }}
+    <span class="mp-btn-collapsible" id="{{ plus_id }}">+</span>
+    <span class="mp-btn-collapsible" id="{{ less_id }}" style="display:none">-</span>
+</div>
+<div class="mp-advanced-config-description" id="{{ desc_id }}" style="display:none">
+    <h4 class="mp-title-checkout-body">{{ advanced_desc }}</h4>
+</div>

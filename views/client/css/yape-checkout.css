@@ -1,0 +1,147 @@
+/* MercadoPago Yape Checkout Styles */
+
+.mp-checkout-yape {
+  padding: 16px 0 24px 0;
+}
+
+/* Header: logo + title + instructions, centered */
+
+.mp-yape-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding-bottom: 20px;
+}
+
+.mp-yape-logo {
+  width: 64px;
+  height: 64px;
+  margin-bottom: 12px;
+}
+
+.mp-yape-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.85);
+  margin: 0 0 6px 0;
+}
+
+.mp-yape-instructions {
+  font-size: 13px;
+  line-height: 18px;
+  color: rgba(0, 0, 0, 0.55);
+  margin: 0;
+  max-width: 320px;
+}
+
+/* Fields */
+
+.mp-yape-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding-bottom: 12px;
+}
+
+.mp-yape-field {
+  display: flex;
+  flex-direction: column;
+}
+
+.mp-yape-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.75);
+  margin-bottom: 4px;
+}
+
+.mp-yape-input {
+  width: 100%;
+  height: 40px;
+  padding: 8px 12px;
+  font-size: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.18);
+  border-radius: 6px;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.mp-yape-input:focus {
+  outline: none;
+  border-color: #3483fa;
+  box-shadow: 0 0 0 3px rgba(52, 131, 250, 0.15);
+}
+
+.mp-yape-otp-input {
+  letter-spacing: 0.25em;
+  font-size: 18px;
+  font-weight: 600;
+  max-width: 180px;
+}
+
+.mp-yape-hint {
+  display: block;
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.45);
+  margin-top: 4px;
+}
+
+.mp-yape-error {
+  display: none;
+  font-size: 12px;
+  color: #f23d4f;
+  margin-top: 4px;
+}
+
+.mp-checkout-yape .mp-yape-input.mp-form-control-error {
+  border-color: #f23d4f;
+  box-shadow: 0 0 0 3px rgba(242, 61, 79, 0.12);
+}
+
+/* Required indicator */
+
+.mp-required {
+  color: #f23d4f;
+  font-weight: 700;
+  margin-left: 2px;
+}
+
+.mp-yape-required-note {
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.55);
+  margin: 4px 0 16px 0;
+}
+
+/* Terms */
+
+.mp-yape-terms {
+  text-align: center;
+  padding-top: 4px;
+}
+
+.mp-yape-terms .mp-label-checkout-custom {
+  font-size: 13px;
+  color: rgba(0, 0, 0, 0.55);
+  margin: 0;
+}
+
+.mp-yape-terms .mp-link-checkout-custom {
+  color: #3483fa;
+  text-decoration: none;
+}
+
+.mp-yape-terms .mp-link-checkout-custom:hover {
+  text-decoration: underline;
+}
+
+/* Mobile */
+
+@media (max-width: 480px) {
+  .mp-yape-otp-input {
+    max-width: 100%;
+  }
+
+  .mp-yape-instructions {
+    max-width: 100%;
+  }
+}

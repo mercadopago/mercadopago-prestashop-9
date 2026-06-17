@@ -1,0 +1,104 @@
+/* MercadoPago Admin Panel - Payment Methods Tabs Styles */
+
+/* Payment methods tabs */
+.mercadopago-payment-methods-tabs {
+    margin-top: 30px;
+    margin-bottom: 20px;
+}
+
+.mercadopago-payment-methods-tabs .nav-tabs {
+    border-bottom: 1px solid #ddd;
+}
+
+.mercadopago-payment-methods-tabs .nav-tabs > li.active > a,
+.mercadopago-payment-methods-tabs .nav-tabs > li.active > a:hover,
+.mercadopago-payment-methods-tabs .nav-tabs > li.active > a:focus {
+    background-color: transparent !important;
+    color: #333 !important;
+    border-color: transparent !important;
+    border-bottom: 1px solid #999 !important;
+    margin-bottom: -2px;
+    text-decoration: none !important;
+}
+
+.mercadopago-payment-methods-tabs .nav-tabs > li > a {
+    color: #333 !important;
+    font-weight: 600;
+    padding: 10px 20px;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    text-decoration: none !important;
+    background-color: transparent !important;
+}
+
+.mercadopago-payment-methods-tabs .nav-tabs > li > a:hover,
+.mercadopago-payment-methods-tabs .nav-tabs > li > a:focus {
+    background-color: transparent !important;
+    border-color: transparent !important;
+    border-bottom: 1px solid #999 !important;
+    margin-bottom: -2px;
+    text-decoration: none !important;
+    color: #333 !important;
+}
+
+.mercadopago-payment-methods-tabs .tab-content {
+    padding: 20px 0;
+}
+
+/* Payment method specific styles */
+.mercadopago-payment-methods-tabs .tab-pane {
+    animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Responsive for payment methods tabs */
+@media (max-width: 768px) {
+    .mercadopago-payment-methods-tabs .nav-tabs > li > a {
+        padding: 8px 15px;
+        font-size: 14px;
+    }
+}
+
+
+/* Pix/PSE/Card form description — match font style of advanced config description */
+#tab-pix-checkout .alert.alert-info,
+#tab-pse-checkout .alert.alert-info,
+#tab-custom-checkout .alert.alert-info {
+    font-family: sans-serif !important;
+    font-size: 18px !important;
+    font-weight: 300 !important;
+    line-height: 1.25 !important;
+    color: #555555 !important;
+}
+
+/* Pix registration guide (shown when account has no Pix key) */
+.mp-pix-registration-guide {
+    padding: 20px 30px;
+}
+.mp-pix-registration-guide p {
+    line-height: 1.8;
+    margin-bottom: 15px;
+}
+.mp-pix-registration-guide .mp-pix-guide-intro {
+    font-size: 20px;
+}
+.mp-pix-registration-guide ol,
+.mp-pix-registration-guide ul {
+    margin: 15px 0 20px 20px;
+}
+.mp-pix-registration-guide ol > li,
+.mp-pix-registration-guide ul > li {
+    margin-bottom: 18px;
+    line-height: 1.6;
+}
+.mp-pix-registration-guide hr {
+    margin: 25px 0;
+}

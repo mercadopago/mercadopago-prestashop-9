@@ -1,0 +1,606 @@
+/* MercadoPago Admin Panel - Presentation Styles */
+
+/* Success and Error Messages */
+.alert-success {
+    background-color: #d4edda !important;
+    border: 1px solid #c3e6cb !important;
+    color: #155724 !important;
+    padding: 12px 20px !important;
+    border-radius: 4px !important;
+    display: flex !important;
+    align-items: center !important;
+    position: relative !important;
+}
+
+/* Hide PrestaShop default alert icons */
+.alert-success::before,
+.alert-success::after,
+.alert-success > i:first-child:not(.alert-icon i),
+.alert-success > i:not(.alert-icon i),
+.alert-success > .icon:first-child:not(.alert-icon),
+.alert-success > .icon:not(.alert-icon),
+.alert-success > span:first-child:not(.alert-icon) > i {
+    display: none !important;
+}
+
+.alert-success .alert-icon {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 24px !important;
+    height: 24px !important;
+    background-color: #28a745 !important;
+    border-radius: 50% !important;
+    margin-right: 12px !important;
+    flex-shrink: 0 !important;
+}
+
+.alert-success .alert-icon i {
+    color: #fff !important;
+    font-size: 14px !important;
+}
+
+.alert-success .alert-text {
+    margin: 0 !important;
+    flex: 1 !important;
+}
+
+.alert-danger {
+    background-color: #f8d7da !important;
+    border: 1px solid #f5c6cb !important;
+    color: #721c24 !important;
+    padding: 12px 20px !important;
+    border-radius: 4px !important;
+    display: flex !important;
+    align-items: center !important;
+    position: relative !important;
+}
+
+/* Hide PrestaShop default alert icons */
+.alert-danger::before,
+.alert-danger::after,
+.alert-danger > i:first-child:not(.alert-icon i),
+.alert-danger > i:not(.alert-icon i),
+.alert-danger > .icon:first-child:not(.alert-icon),
+.alert-danger > .icon:not(.alert-icon),
+.alert-danger > span:first-child:not(.alert-icon) > i {
+    display: none !important;
+}
+
+.alert-danger .alert-icon {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 24px !important;
+    height: 24px !important;
+    background-color: #dc3545 !important;
+    border-radius: 50% !important;
+    margin-right: 12px !important;
+    flex-shrink: 0 !important;
+}
+
+.alert-danger .alert-icon i {
+    color: #fff !important;
+    font-size: 14px !important;
+}
+
+.alert-danger .alert-text {
+    margin: 0 !important;
+    flex: 1 !important;
+}
+
+.alert .close {
+    position: absolute !important;
+    top: 10px !important;
+    right: 15px !important;
+    font-size: 21px !important;
+    font-weight: bold !important;
+    line-height: 1 !important;
+    color: inherit !important;
+    opacity: 0.5 !important;
+    background: transparent !important;
+    border: 0 !important;
+    padding: 0 !important;
+    cursor: pointer !important;
+}
+
+.alert .close:hover {
+    opacity: 1 !important;
+}
+
+/* Header with logo */
+.mercadopago-header {
+    text-align: right;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+.mercadopago-header img {
+    max-height: 50px;
+    vertical-align: middle;
+}
+
+.mercadopago-header .version {
+    margin-left: 10px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Navigation tabs (main tabs: Config, About, Logs) */
+.mercadopago-tabs {
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.mercadopago-tabs .version-tab {
+    float: right;
+    margin-top: 10px;
+}
+
+.mercadopago-tabs .version-text {
+    color: #777;
+    font-size: 14px;
+    font-weight: normal;
+    padding: 0 15px;
+}
+
+.mercadopago-tabs .nav-tabs {
+    border-bottom: 2px solid #333;
+}
+
+.mercadopago-tabs .nav-tabs > li.active > a,
+.mercadopago-tabs .nav-tabs > li.active > a:hover,
+.mercadopago-tabs .nav-tabs > li.active > a:focus {
+    background-color: transparent !important;
+    color: #333 !important;
+    border-color: transparent !important;
+    border-bottom: 2px solid #333 !important;
+    margin-bottom: -2px;
+    text-decoration: none !important;
+}
+
+.mercadopago-tabs .nav-tabs > li > a {
+    color: #333 !important;
+    font-weight: 600;
+    padding: 10px 20px;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    text-decoration: none !important;
+    background-color: transparent !important;
+}
+
+.mercadopago-tabs .nav-tabs > li > a:hover,
+.mercadopago-tabs .nav-tabs > li > a:focus {
+    background-color: transparent !important;
+    border-color: transparent !important;
+    border-bottom: 2px solid #333 !important;
+    margin-bottom: -2px;
+    text-decoration: none !important;
+    color: #333 !important;
+}
+
+/* Info message */
+.mercadopago-info-message {
+    margin-bottom: 20px;
+    padding: 0;
+    background-color: transparent !important;
+    border: none !important;
+    color: #777;
+    text-align: center;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+.mercadopago-info-message.alert,
+.mercadopago-info-message.alert-info {
+    background-color: transparent !important;
+    border: none !important;
+    color: #333 !important;
+}
+
+/* Form descriptions - remove blue background and icon from HelperForm descriptions */
+.panel .alert-info,
+.panel-body .alert-info {
+    background: transparent !important;
+    border: none !important;
+    color: #333 !important;
+    padding: 0 !important;
+    margin-top: 20px !important;
+    margin-bottom: 20px !important;
+}
+
+.panel .alert-info::before,
+.panel .alert-info i,
+.panel .alert-info .icon,
+.panel-body .alert-info::before,
+.panel-body .alert-info i,
+.panel-body .alert-info .icon {
+    display: none !important;
+}
+
+/* Configuration sections */
+.mercadopago-config-section {
+    margin-bottom: 30px;
+}
+
+.mercadopago-config-section .panel {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.mercadopago-config-section .panel-heading {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #ddd;
+    padding: 15px;
+}
+
+.mercadopago-config-section .panel-heading h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+/* Gray header for each configuration section panel */
+.panel .panel-heading,
+.form-wrapper .panel-heading,
+.panel-heading {
+    background-color: #f5f5f5 !important;
+    border-bottom: 1px solid #ddd !important;
+    padding: 15px 20px !important;
+    margin: 0 !important;
+    margin-bottom: 0 !important;
+}
+
+.panel .panel-heading h3,
+.form-wrapper .panel-heading h3,
+.panel-heading h3 {
+    margin: 0 !important;
+    font-size: 18px !important;
+    font-weight: 600 !important;
+    color: #333 !important;
+}
+
+/* Add spacing after panel heading */
+.panel .panel-body,
+.form-wrapper .panel-body,
+.panel-body,
+.mercadopago-config-section .panel-body {
+    padding-top: 35px !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    padding-bottom: 20px !important;
+    border-bottom: none !important;
+}
+
+/* Add spacing for description text after header */
+.panel .panel-body > p:first-child,
+.form-wrapper .panel-body > p:first-child,
+.panel-body > p:first-child,
+.panel .panel-body > .form-group:first-child,
+.form-wrapper .panel-body > .form-group:first-child,
+.panel-body > .form-group:first-child {
+    margin-top: 0 !important;
+    margin-bottom: 20px !important;
+}
+
+/* Remove all borders and lines from panel-footer */
+.mercadopago-config-section .panel-footer,
+.panel-footer,
+.mercadopago-config-section .panel .panel-footer,
+.mercadopago-config-section .form-wrapper .panel-footer {
+    border-top: none !important;
+    border-bottom: none !important;
+    border-left: none !important;
+    border-right: none !important;
+    border: none !important;
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+}
+
+/* Remove any border from form wrapper */
+.mercadopago-config-section .form-wrapper {
+    border-top: none !important;
+    border-bottom: none !important;
+}
+
+/* Remove border from any hr or separator elements */
+.mercadopago-config-section hr,
+.mercadopago-config-section .panel-footer hr {
+    display: none !important;
+}
+
+/* Form fields */
+.mercadopago-config-section .form-group {
+    margin-bottom: 20px;
+}
+
+.mercadopago-config-section .form-group label {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.mercadopago-config-section .form-group .form-control {
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    padding: 8px 12px;
+}
+
+.mercadopago-config-section .form-group .form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Save Buttons Styling */
+.panel-footer .btn,
+.panel-footer .btn-default,
+.form-wrapper .panel-footer .btn,
+.form-wrapper .panel-footer .btn-default,
+.mercadopago-config-section .panel-footer .btn,
+.mercadopago-config-section .panel-footer .btn-default,
+.mercadopago-config-section .form-wrapper .panel-footer .btn,
+.mercadopago-config-section .form-wrapper .panel-footer .btn-default {
+    background-color: #009ee3 !important;
+    color: #ffffff !important;
+    border: none !important;
+    border-radius: 4px !important;
+    padding: 10px 20px !important;
+    font-weight: 600 !important;
+    font-size: 14px !important;
+    cursor: pointer !important;
+    transition: background-color 0.3s ease !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+}
+
+.panel-footer .btn:hover,
+.panel-footer .btn-default:hover,
+.form-wrapper .panel-footer .btn:hover,
+.form-wrapper .panel-footer .btn-default:hover,
+.mercadopago-config-section .panel-footer .btn:hover,
+.mercadopago-config-section .panel-footer .btn-default:hover,
+.mercadopago-config-section .form-wrapper .panel-footer .btn:hover,
+.mercadopago-config-section .form-wrapper .panel-footer .btn-default:hover {
+    background-color: #0088c7 !important;
+    color: #ffffff !important;
+    text-decoration: none !important;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15) !important;
+}
+
+.panel-footer .btn:focus,
+.panel-footer .btn-default:focus,
+.form-wrapper .panel-footer .btn:focus,
+.form-wrapper .panel-footer .btn-default:focus,
+.mercadopago-config-section .panel-footer .btn:focus,
+.mercadopago-config-section .panel-footer .btn-default:focus,
+.mercadopago-config-section .form-wrapper .panel-footer .btn:focus,
+.mercadopago-config-section .form-wrapper .panel-footer .btn-default:focus {
+    background-color: #0088c7 !important;
+    color: #ffffff !important;
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(0, 158, 227, 0.25) !important;
+}
+
+.panel-footer .btn:active,
+.panel-footer .btn-default:active,
+.form-wrapper .panel-footer .btn:active,
+.form-wrapper .panel-footer .btn-default:active,
+.mercadopago-config-section .panel-footer .btn:active,
+.mercadopago-config-section .panel-footer .btn-default:active,
+.mercadopago-config-section .form-wrapper .panel-footer .btn:active,
+.mercadopago-config-section .form-wrapper .panel-footer .btn-default:active {
+    background-color: #0077b3 !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Remove any border lines around buttons */
+.panel-footer .btn::before,
+.panel-footer .btn::after,
+.form-wrapper .panel-footer .btn::before,
+.form-wrapper .panel-footer .btn::after {
+    display: none !important;
+}
+
+/* Start selling section */
+.mercadopago-start-selling .panel-body {
+    overflow: visible !important;
+}
+
+.mercadopago-start-selling .btn {
+    white-space: nowrap !important;
+    overflow: visible !important;
+}
+
+/* Localization banner — neutralize HelperForm's col-lg-8 col-lg-offset-3
+   wrapper so the banner can span the full panel-body width and center its
+   children. Uses a direct class on the .form-group (no :has() needed). */
+.form-group.mp-localization-form-group {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    float: none !important;
+}
+
+.form-group.mp-localization-form-group > label {
+    display: none !important;
+}
+
+.form-group.mp-localization-form-group > [class*="col-"] {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    float: none !important;
+}
+
+.mp-localization-container {
+    width: 100%;
+}
+
+.mp-localization-banner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 20px 0;
+    width: 100%;
+    text-align: center;
+}
+
+.mp-localization-img {
+    flex-shrink: 0;
+}
+
+.mp-localization-img img {
+    width: 180px;
+    display: block;
+}
+
+.mp-localization-form {
+    max-width: 380px;
+    width: 100%;
+}
+
+.mp-localization-form h4 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    margin: 0 0 8px;
+}
+
+.mp-localization-form p {
+    font-size: 14px;
+    color: #666;
+    margin: 0 0 16px;
+}
+
+.mp-country-select {
+    width: 100%;
+    display: block;
+}
+
+
+/* Checkbox group container */
+.mp-checkbox-group {
+    border: 1px solid #cccccc;
+    font-size: 13px;
+}
+
+/* Ticket Settings — master checkbox */
+.mp-all-checkbox {
+    padding: 10px;
+    border-bottom: 1px solid #cccccc;
+}
+
+.mp-checkbox-group .checkbox {
+    padding: 8px 10px;
+    margin: 0;
+}
+
+/* Ticket Settings — Advanced Config collapsible header */
+.mp-panel-advanced-config {
+    cursor: pointer;
+    padding: 10px 15px;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    border-top: 1px solid #eeeeee !important;
+    background-color: #f5f5f5;
+    user-select: none;
+    font-weight: 600;
+    font-size: 13px;
+    color: #555;
+}
+
+.mp-panel-advanced-config i {
+    margin-right: 6px;
+}
+
+/* Ticket Settings — +/- toggle button */
+.mp-btn-collapsible {
+    float: right;
+    font-size: 25px;
+    padding: 0 13px 0 0;
+    margin-top: -4px;
+    line-height: 1;
+}
+
+/* Ticket Settings — description inside advanced config */
+.mp-advanced-config-description {
+    display: none;
+    padding: 20px 15px 5px;
+}
+
+.mp-title-checkout-body {
+    font-family: sans-serif !important;
+    margin: 5px 0 !important;
+    font-size: 18px !important;
+    font-weight: 300 !important;
+    line-height: 1.25;
+    color: #555555 !important;
+}
+
+.mp-pointer   { cursor: pointer !important; }
+.mp-no-select { user-select: none !important; }
+.mp-pl-5      { padding-left: 5px !important; }
+.mp-mb-10     { margin-bottom: 10px !important; }
+.mp-w-300     { width: 300px !important; }
+.mp-pb-30     { padding-bottom: 30px !important; }
+
+/* Configure fees section — card checkout admin */
+.mp-configure-fees-title {
+    padding: 15px 15px 0;
+}
+
+.mp-configure-fees-body {
+    padding: 5px 15px 25px;
+}
+
+.mp-text-credenciais {
+    font-size: 13px;
+    margin-bottom: 0 !important;
+    line-height: 1.5;
+}
+
+.mp-btn-credenciais,
+.mp-configure-fees-body .btn.mp-btn-credenciais {
+    border-radius: 2px !important;
+    border: solid 1px #adadad !important;
+    border-bottom: solid 1px #adadad !important;
+    padding: 12px 50px !important;
+    font-size: 13px !important;
+    color: #6c868e !important;
+    background-color: #fafafa !important;
+    box-shadow: none !important;
+}
+
+.mp-btn-credenciais:hover,
+.mp-configure-fees-body .btn.mp-btn-credenciais:hover {
+    background-color: #e6e6e6 !important;
+    border-color: #adadad !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .mercadopago-header {
+        text-align: center;
+    }
+    
+    .mercadopago-tabs .nav-tabs > li > a {
+        padding: 8px 15px;
+        font-size: 14px;
+    }
+
+    .mp-localization-banner {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .mp-localization-img img {
+        width: 140px;
+    }
+}

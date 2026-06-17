@@ -1,0 +1,10 @@
+# Files/dirs excluded from git archive and marketplace package exports
+tests/                    export-ignore
+phpunit.xml               export-ignore
+phpunit.xml.dist          export-ignore
+phpcs.xml                 export-ignore
+phpstan.neon              export-ignore
+.php-cs-fixer.php         export-ignore
+.pre-commit-config.yaml   export-ignore
+CLAUDE.md                 export-ignore
+AGENTS.md                 export-ignore

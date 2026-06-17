@@ -1,0 +1,42 @@
+<div class="panel">
+    <div class="panel-heading">
+        <i class="{{ icon }}"></i>
+        {{ title }}
+    </div>
+    <div class="form-wrapper">
+        <div class="panel-body">
+            {% if description %}
+                <div class="alert alert-info">
+                    {{ description }}
+                </div>
+            {% endif %}
+            
+            <div id='start-onboarding' class='mp-credentials-container'>
+                <div class='row'>
+                    <div class='mp-credentials-banner'>
+                        <div>
+                            <img src='https://http2.mlstatic.com/storage/cpp/static-files/e0036541-d699-4c22-b0e1-0d8ef8aeb2f0.png' alt='Mercado Pago' />
+                        </div>
+                        <div class='mp-credentials-banner-info'>
+                            <div class='mp-credentials-banner-text'>
+                                <h4>{{ l('We will take you to Mercado Pago to choose the account where you will receive the money from your sales') }}</h4>
+                                <p>{{ l('It will only take a few minutes.') }}</p>
+                            </div>
+                            <div class='mp-credentials-banner-actions'>
+                                <button
+                                    id="start-automatic-credentials"
+                                    type="button"
+                                    data-redirect-url="{{ iframe_url|escape('html_attr') }}"
+                                    {% if needs_fingerprint %}data-needs-fingerprint="1" disabled{% endif %}
+                                >
+                                    {{ l('Start linking') }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

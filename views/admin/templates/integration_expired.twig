@@ -1,0 +1,41 @@
+<div class="panel">
+    <div class="panel-heading">
+        <i class="{{ icon }}"></i>
+        {{ title }}
+    </div>
+    <div class="form-wrapper">
+        <div class="panel-body">
+            {% if description %}
+                <div class="alert alert-info">
+                    {{ description }}
+                </div>
+            {% endif %}
+            
+            <div id='integration-expired' class='mp-credentials-container'>
+                <div class='row'>
+                    <div class='mp-integration-expired-banner'>
+                        <div>
+                            <img src='https://http2.mlstatic.com/storage/cpp/static-files/4727a9bd-8d65-4d39-a025-e6ea25dcab2b.png' alt='Integration expired' />
+                        </div>
+                        <div class='mp-integration-expired-banner-info'>
+                            <div class='mp-integration-expired-banner-text'>
+                                <h4>{{ l('Update your store link to Mercado Pago') }}</h4>
+                                <p>{{ l('This action is necessary to keep receiving payments in your store as usual.') }}</p>
+                            </div>
+                            <div class='mp-integration-expired-banner-actions'>
+                                <button
+                                    id="integration-expired-btn"
+                                    type="button"
+                                    data-redirect-url="{{ iframe_url|escape('html_attr') }}"
+                                >
+                                    {{ l('Update link') }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

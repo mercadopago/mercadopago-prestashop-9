@@ -1,0 +1,13 @@
+Hola {firstname} {lastname},
+
+Pedido {order_name} - Pago pendiente
+
+El pedido {order_name} fue recibido con éxito. Estamos esperando la confirmación del pago.
+
+Puede revisar su pedido y descargar su factura en la sección "Historial de Pedidos" haciendo clic en "Mi cuenta" de su cuenta.
+
+Si tiene una cuenta de invitado, puede seguir su pedido a través del enlace: {guest_tracking_url}
+
+{shop_name} - {shop_url}
+
+{shop_url} powered by PrestaShop&trade;

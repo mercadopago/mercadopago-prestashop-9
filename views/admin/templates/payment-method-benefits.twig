@@ -1,0 +1,10 @@
+{#
+    Bullet list of payment method benefits.
+    Variables:
+      - items: array of translatable strings (passed from each SettingsService)
+#}
+<ul>
+    {% for item in items %}
+        <li>{{ item }}</li>
+    {% endfor %}
+</ul>

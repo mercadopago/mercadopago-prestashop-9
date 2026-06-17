@@ -1,0 +1,19 @@
+{#
+    Configure-fees section for card checkout settings.
+    Hidden on render; card-settings.js inserts it inside the form-wrapper,
+    before the Advanced Configuration header, at the same sibling level as form-groups.
+    Variables:
+      - title: section heading (translated)
+      - description: body text (translated)
+      - button_text: link text (translated)
+      - url: country-specific MercadoPago costs-section URL
+#}
+<div id="mp-card-configure-fees" style="display:none">
+    <div class="mp-configure-fees-title">
+        <h4 class="mp-title-checkout-body">{{ title }}</h4>
+    </div>
+    <div class="mp-configure-fees-body">
+        <p class="mp-text-credenciais mp-pb-30">{{ description }}</p>
+        <a href="{{ url }}" class="btn btn-default mp-btn-credenciais mp-mb-10 mp-w-300" target="_blank" rel="noopener">{{ button_text }}</a>
+    </div>
+</div>

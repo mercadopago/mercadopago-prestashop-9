@@ -1,0 +1,61 @@
+<div class="panel">
+    <div class="panel-heading">
+        <i class="{{ icon }}"></i>
+        {{ title }}
+    </div>
+    <div class="form-wrapper">
+        <div class="panel-body">
+            {% if description %}
+                <div class="alert alert-info">
+                    {{ description }}
+                </div>
+            {% endif %}
+            
+            <div id='error-get-integration' class='mp-error-get-integration-container'>
+                <div class='row'>
+                    <div class='mp-error-get-integration-banner'>
+                        <div class='mp-error-get-integration-banner-text'>
+                            {% if seller_experience_status == 'new' %}
+                                <h4>{{ l('Well done! You linked your Mercado Pago account to receive the money from your sales') }}</h4>
+                                <p>{{ l('Now, finish setting up the sections below to start selling.') }}</p>
+                            {% endif %}
+                            {% if seller_experience_status == 'old' %}
+                                <h4>{{ l('You linked your Mercado Pago account to receive the money from your sales') }}</h4>
+                                <p>{{ l('If you have not done so yet, finish setting up the sections below to start selling.') }}</p>
+                            {% endif %}
+                            {% if seller_experience_status == 'updated' %}
+                                <h4>{{ l('You updated your Mercado Pago account to receive the money from your sales') }}</h4>
+                                <p>{{ l('Keep selling as usual.') }}</p>
+                            {% endif %}
+                        </div>
+                        <div class='mp-vertical-row'></div>
+                        <div class='mp-error-get-integration-banner-store-details'>
+                            <div class='mp-store-data-error'>
+                                <div class='mp-store-data-details'>
+                                    <div class='mp-store-data-image'>
+                                        <img src='https://http2.mlstatic.com/storage/cpp/static-files/88208a54-cad7-4eb4-bfdb-b0d269794ba3.png' alt='Get integration error' />
+                                    </div>
+                                    <div class='mp-store-data-text'>
+                                        <h4>{{ l('Something went wrong') }}</h4>
+                                        <span>{{ l('It was not possible to upload your details.') }}</span>
+                                        <span></span>
+                                    </div>
+                                </div>
+                                <div class='mp-store-data-actions'>
+                                    <button
+                                        id='switch-account-btn'
+                                        type='button'
+                                        data-redirect-url="{{ admin_error_redirect_url|escape('html_attr') }}"
+                                    >
+                                        {{ l('Try again') }}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

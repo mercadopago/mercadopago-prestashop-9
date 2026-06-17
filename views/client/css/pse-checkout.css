@@ -1,0 +1,33 @@
+/* MercadoPago PSE Checkout Styles */
+
+.mp-pse-checkout-container > div {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-top: 12px;
+}
+
+.mp-pse-checkout-container label {
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.mp-pse-checkout-subtitle {
+    margin-top: 0;
+}
+
+.mp-pse-checkout-container.mp-checkout-form {
+    padding-top: 0;
+}
+
+.mp-pse-checkout-container .mp-frame-title {
+    padding-top: 0;
+}
+
+/* Field error message */
+.mp-field-error {
+    line-height: 1.29;
+    color: #f04449 !important;
+    display: none;
+    padding-left: 2px;
+}

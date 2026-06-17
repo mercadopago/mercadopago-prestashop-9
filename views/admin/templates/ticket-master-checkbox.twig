@@ -1,0 +1,13 @@
+{#
+    Master "select all" checkbox for Ticket payment methods.
+    Rendered hidden; ticket-settings.js inserts it before the payment method checkboxes.
+    All translatable strings are passed as variables (see TicketSettingsService::renderMasterCheckbox).
+#}
+<div id="mp-ticket-checkbox-group" class="mp-checkbox-group" style="display:none">
+    <div class="mp-all-checkbox">
+        <input type="checkbox" id="mp-checkmeticket">
+        <label for="mp-checkmeticket">
+            <b class="mp-pointer mp-no-select mp-pl-5">{{ select_payments }}</b>
+        </label>
+    </div>
+</div>

@@ -1,0 +1,78 @@
+<div id='binding-data-modal' class='mp-binding-data-modal'>
+    <div class='mp-binding-data-modal-content'>
+        <div class='mp-binding-data-modal-head'>
+            <div class='mp-binding-data-modal-head-title'>
+                <h2>{{ l('Linking process details') }}</h2>
+                <img class='mp-close-icon' src='https://http2.mlstatic.com/storage/cpp/static-files/a257437b-884f-4fb7-9668-e7c39d8c7584.png' />
+            </div>
+            <p>{{ l('During the linking process, an app is created to identify your store within Mercado Pago and your credentials (authentication keys) are generated. These enable you to receive payments or run tests in your checkout.') }}</p>
+        </div>
+        <div class='mp-binding-data-modal-body'>
+            <div class='mp-binding-data-modal-body-app-name'>
+                <h4>{{ l('App name') }}</h4>
+                <span>{{ mp_integration_name|escape('html') }}</span>
+            </div>
+            <div class='mp-binding-data-modal-body-prod-credentials'>
+                <div>
+                    <h4>{{ l('Production credentials') }}</h4>
+                    <span>{{ l('These enable the checkout to receive real payments in your store.') }}</span>
+                </div>
+                <div>
+                    <span>{{ l('Public Key') }}</span>
+                    <p>{{ public_key|escape('html') }}</p>
+                </div>
+                <div>
+                    <span>{{ l('Access Token') }}</span>
+                    <p class='mp-access-token'>
+                        <span
+                            id='prod-access-token'
+                            data-mask='*********-*****-*********-******-****'
+                        >
+                            *********-*****-*********-******-****
+                        </span>
+                        <img
+                            id='reveal-prod-credentials-btn'
+                            class='mp-eye-icon'
+                            src='https://http2.mlstatic.com/storage/cpp/static-files/15fcd268-ce2a-4b74-8698-f48d09cf8159.png'
+                        />
+                    </p>
+                </div>
+            </div>
+            <div class='mp-binding-data-modal-body-test-credentials'>
+                <div>
+                    <h4>{{ l('Testing credentials') }}</h4>
+                    <span>{{ l('These enable you to simulate payments in the checkout or run tests.') }}</span>
+                </div>
+                <div>
+                    <span>{{ l('Public Key') }}</span>
+                    <p>{{ sandbox_public_key|escape('html') }}</p>
+                </div>
+                <div>
+                    <span>{{ l('Access Token') }}</span>
+                    <p class='mp-access-token'>
+                        <span
+                            id='test-access-token'
+                            data-mask='*********-*****-*********-******-****'
+                        >
+                            *********-*****-*********-******-****
+                        </span>
+                        <img
+                            id='reveal-test-credentials-btn'
+                            class='mp-eye-icon'
+                            src='https://http2.mlstatic.com/storage/cpp/static-files/15fcd268-ce2a-4b74-8698-f48d09cf8159.png'
+                        />
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class='mp-binding-data-modal-footer'>
+            <span>
+                {{ l('Are you a developer? Access the') }}
+                <a
+                    href='https://www.mercadopago{{ country_domain|escape('html') }}/developers/panel/app/{{ client_id|escape('html') }}'
+                    target='_blank'
+                >{{ l('Developer Dashboard') }}</a>.
+            </span>
+        </div>
+    </div>
+</div>

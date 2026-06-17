@@ -1,0 +1,110 @@
+{#
+ * 2007-2025 PrestaShop.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@prestashop.com so we can send you a copy immediately.
+ *
+ * @copyright Copyright (c) MercadoPago
+ * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ #}
+
+<form id="mp-pse-checkout"
+      class="mp-checkout-form mp-pse-checkout-container"
+      method="POST"
+      action="{{ action_url }}">
+
+    <!-- Section title -->
+    <h3 class="mp-pse-checkout-subtitle mp-frame-title">
+        {{ l('Select where you want to pay') }}
+    </h3>
+
+    <!-- Select person type -->
+    <div class="form-group">
+        <label for="mp-pse-person-type">
+            {{ l('Person Type') }}<b class="mp-required">*</b>
+        </label>
+        <select id="mp-pse-person-type"
+                name="mercadopago_pse[person_type]"
+                class="form-control mp-form-control mp-select mp-pointer">
+            <option value="">{{ l('Select a type of person') }}</option>
+            {% for value in payment_method_info.person_types %}
+                <option value="{{ value.id }}">{{ value.name }}</option>
+            {% endfor %}
+        </select>
+        <small class="mp-field-error" id="mp-pse-person-type-error">
+            {{ l('Select a person type') }}
+        </small>
+    </div>
+
+    <!-- Select document type -->
+    <div class="form-group">
+        <label for="mp-pse-document-type">
+            {{ l('Holder document') }}<b class="mp-required">*</b>
+        </label>
+        <select id="mp-pse-document-type"
+                name="mercadopago_pse[document_type]"
+                class="form-control mp-form-control mp-select mp-pointer">
+            <option value="">{{ l('Select a document type') }}</option>
+            {% for value in payment_method_info.allowed_identification_types %}
+                <option data-minlength="{{ value.min_length }}"
+                        data-maxlength="{{ value.max_length }}"
+                        data-type="{{ value.type }}"
+                        value="{{ value.id }}">{{ value.name }}</option>
+            {% endfor %}
+        </select>
+        <small class="mp-field-error" id="mp-pse-document-type-error">
+            {{ l('Select a document type') }}
+        </small>
+    </div>
+
+    <!-- Input document number -->
+    <div class="form-group">
+        <label for="mp-pse-document-number">
+            {{ l('Holder document number') }}<b class="mp-required">*</b>
+        </label>
+        <input type="text"
+               id="mp-pse-document-number"
+               name="mercadopago_pse[document_number]"
+               class="form-control mp-form-control">
+        <small class="mp-field-error" id="mp-pse-document-number-error">
+            {{ l('Enter a valid document number') }}
+        </small>
+    </div>
+
+    <!-- Select financial institution -->
+    <div class="form-group">
+        <label for="mp-pse-bank">
+            {{ l('Financial Institution') }}<b class="mp-required">*</b>
+        </label>
+        <select id="mp-pse-bank"
+                name="mercadopago_pse[financial_institution]"
+                class="form-control mp-form-control mp-select mp-pointer">
+            <option value="">{{ l('Select a financial institution') }}</option>
+            {% for value in payment_method_info.financial_institutions %}
+                <option value="{{ value.id }}">{{ value.description }}</option>
+            {% endfor %}
+        </select>
+        <small class="mp-field-error" id="mp-pse-bank-error">
+            {{ l('Select a financial institution') }}
+        </small>
+    </div>
+
+    <!-- Terms and conditions -->
+    <div>
+        <p>
+            {{ l('By continuing, you agree to our ') }}
+            <a class="mp-link" href="{{ terms_url|default('#')|escape('html') }}" target="_blank" rel="noopener">
+                {{ l('Terms and Conditions') }}
+            </a>
+        </p>
+    </div>
+
+
+</form>

@@ -1,0 +1,13 @@
+Hello {firstname} {lastname},
+
+Order {order_name} - Payment under review.
+
+Order {order_name} has been processed successfully. Within 2 business days you will be notified by email whether it was confirmed or if we need more information.
+
+You can review your order and download your invoice in the "Order History" section of your account by clicking on "My account" section of your account.
+
+If you have a guest account, you can track your order through: {guest_tracking_url}
+
+{shop_name} - {shop_url}
+
+{shop_url} powered by PrestaShop&trade;

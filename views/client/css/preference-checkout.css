@@ -1,0 +1,106 @@
+/* MercadoPago Checkout Pro Styles */
+
+/* Main container */
+
+.mp-checkout-preference {
+    padding-left: 0 !important;
+    padding-top: 20px !important;
+}
+
+/* Benefits section */
+
+.mp-preference__icon {
+    width: 16px;
+    height: 16px;
+    margin-right: 3px;
+}
+
+.mp-preference__title {
+    font-family: inherit !important;
+    font-size: 18px !important;
+    font-weight: 600 !important;
+    line-height: 22px !important;
+    color: rgba(0, 0, 0, 0.9) !important;
+}
+
+.mp-preference__text {
+    font-size: 14px !important;
+    font-weight: 400 !important;
+    line-height: 1.29 !important;
+    color: rgba(0, 0, 0, 0.55) !important;
+    margin: 0 0 32px 0 !important;
+}
+
+.mp-preference__text:first-of-type {
+    margin-bottom: 16px !important;
+}
+
+.mp-preference__text--bold {
+    font-weight: 600 !important;
+    vertical-align: middle !important;
+}
+
+/* Redirect info message */
+
+.mp-redirect-info {
+    background-color: rgba(245, 245, 245, 1);
+    padding: 20px;
+    border-radius: 6px;
+    margin-bottom: 13px;
+}
+
+.mp-redirect-info__text {
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.29;
+    color: rgba(0, 0, 0, 0.55);
+    vertical-align: middle;
+    margin: 0;
+}
+
+.mp-redirect-info__text:first-child {
+    margin-bottom: 8px;
+}
+
+.mp-redirect-info__text--bold {
+    font-weight: 600;
+}
+
+.mp-redirect-info__icon {
+    height: 16px;
+    width: auto;
+    margin-right: 6px;
+}
+
+/* Redirect frame */
+
+.mp-redirect-frame {
+    text-align: center;
+    background-color: #f5f5f5;
+    padding: 25px 0 10px;
+}
+
+.mp-redirect-frame img {
+    max-width: 160px !important;
+}
+
+.mp-redirect-frame p {
+    padding-top: 15px !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    line-height: 1.71 !important;
+    color: #333333 !important;
+}
+
+/* Checkout Pro logo size */
+
+body#checkout section.checkout-step .payment-options label img[src="https://http2.mlstatic.com/storage/cpp/static-files/306698cd-ff92-4cc0-801c-1ca35d06ed5a.png"] {
+    width: 21px !important;
+    height: 21px !important;
+}
+
+@media (max-width: 767.98px) {
+    .mp-redirect-frame {
+        margin-top: 20px;
+    }
+}

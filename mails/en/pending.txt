@@ -1,0 +1,13 @@
+Hello {firstname} {lastname},
+
+Order {order_name} - Pending payment
+
+Order {order_name} has been placed successfully. We are waiting for the payment to be confirmed.
+
+You can review your order and download your invoice in the "Order History" section of your account by clicking on "My account" section of your account.
+
+If you have a guest account, you can track your order through: {guest_tracking_url}
+
+{shop_name} - {shop_url}
+
+{shop_url} powered by PrestaShop&trade;

@@ -1,0 +1,143 @@
+{#
+ * 2007-2025 PrestaShop.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@prestashop.com so we can send you a copy immediately.
+ *
+ * @copyright Copyright (c) MercadoPago
+ * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ #}
+
+<div id="mp-pix-pending" class="mp-pix-pending">
+    <div class="mp-pix-confirmation">
+
+        <div class="mp-pix-pending-header">
+            <h2 class="mp-pix-pending-title">{{ l('Almost there! Pay via Pix to complete your purchase') }}</h2>
+        </div>
+
+        <div class="mp-pix-pending-summary">
+            <div class="mp-pix-box mp-pix-box-column">
+                <span class="mp-pix-box-title">{{ l('Amount') }}</span>
+                <span class="mp-pix-box-subtitle">{{ total_amount }}</span>
+            </div>
+            <div class="mp-pix-box mp-pix-box-column">
+                <span class="mp-pix-box-title">{{ l('Expiration') }}</span>
+                <span class="mp-pix-box-subtitle">{{ expiration_date }}</span>
+            </div>
+        </div>
+
+        {# Desktop: QR code first, then copy-paste #}
+        <div class="mp-pix-container-desktop">
+
+            <div class="mp-pix-section">
+                <span class="mp-pix-text-subtitle">{{ l('Scan this QR code to pay') }}</span>
+            </div>
+
+            <div class="mp-pix-section">
+                <ol class="mp-pix-text-subtitle-item">
+                    <li>{{ l('Access your bank or payment app') }}</li>
+                    <li>{{ l('Choose the option to pay via Pix with QR code') }}</li>
+                    <li>{{ l('Scan the following code:') }}</li>
+                </ol>
+            </div>
+
+            <div class="mp-pix-section mp-pix-qrcode-wrapper">
+                <img
+                    class="mp-pix-qrcode"
+                    src="data:image/png;base64,{{ qr_code_base64 }}"
+                    alt="QR Code PIX"
+                />
+            </div>
+
+            <hr class="mp-pix-divider">
+
+            <div class="mp-pix-section">
+                <h3 class="mp-pix-text-subtitle">{{ l('Or pay with Pix code "Copy and Paste"')|raw }}</h3>
+            </div>
+
+            <div class="mp-pix-section">
+                <p class="mp-pix-text-subtitle-item">{{ l('Access your bank or payment app and choose the option to pay via Pix. Then, paste the following code:') }}</p>
+            </div>
+
+            <div class="mp-pix-section mp-pix-copy-row">
+                <input
+                    id="mp-pix-input-code"
+                    type="text"
+                    class="mp-pix-code-input"
+                    value="{{ qr_code }}"
+                    readonly
+                />
+                <button id="mp-pix-copy-code" class="mp-pix-copy-btn btn btn-primary">
+                    {{ l('Copy code') }}
+                </button>
+            </div>
+
+        </div>
+
+        {# Mobile: copy-paste first, then QR code #}
+        <div class="mp-pix-container-mobile">
+
+            <div class="mp-pix-section">
+                <h3 class="mp-pix-text-subtitle">{{ l('Use Pix Copy and Paste to pay') }}</h3>
+            </div>
+
+            <div class="mp-pix-section">
+                <ol class="mp-pix-text-subtitle-item">
+                    <li>{{ l('Access your bank or payments app') }}</li>
+                    <li>{{ l('Choose to pay via Pix') }}</li>
+                    <li>{{ l('Paste the following code:') }}</li>
+                </ol>
+            </div>
+
+            <div class="mp-pix-section">
+                <input
+                    id="mp-pix-input-code-mobile"
+                    type="text"
+                    class="mp-pix-code-input"
+                    value="{{ qr_code }}"
+                    readonly
+                />
+            </div>
+
+            <div class="mp-pix-section">
+                <button id="mp-pix-copy-code-mobile" class="mp-pix-copy-btn btn btn-primary">
+                    {{ l('Copy code') }}
+                </button>
+            </div>
+
+            <hr class="mp-pix-divider">
+
+            <div class="mp-pix-section">
+                <h3 class="mp-pix-text-subtitle">{{ l('Or pay using QR Code') }}</h3>
+            </div>
+
+            <div class="mp-pix-section">
+                <p class="mp-pix-text-subtitle-item">{{ l('Access your bank or payments app and choose to pay via Pix with QR Code. Then, scan the following code:') }}</p>
+            </div>
+
+            <div class="mp-pix-section mp-pix-qrcode-wrapper">
+                <img
+                    class="mp-pix-qrcode"
+                    src="data:image/png;base64,{{ qr_code_base64 }}"
+                    alt="QR Code PIX"
+                />
+            </div>
+
+        </div>
+
+        <div class="mp-pix-pending-footer">
+            <img class="mp-badge-info" src="{{ module_dir }}views/client/img/icons/badge_info_gray.png" alt="" />
+            <span class="mp-pix-text-info">
+                {{ l('Pix has a daily transfer limit. Please contact your bank for more information.') }}
+            </span>
+        </div>
+
+    </div>
+</div>

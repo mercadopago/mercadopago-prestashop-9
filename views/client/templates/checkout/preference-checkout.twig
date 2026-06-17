@@ -1,0 +1,98 @@
+{# 
+ * 2007-2025 PrestaShop.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@prestashop.com so we can send you a copy immediately.
+ *
+ * @copyright Copyright (c) MercadoPago
+ * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ #}
+
+<div class="mp-checkout-preference"
+     data-mp-modal="{{ is_modal ? 'true' : 'false' }}"
+     data-mp-public-key="{{ public_key }}"
+     data-mp-action-url="{{ action_url }}"
+     data-mp-failure-url="{{ failure_url }}">
+    <div class="row mp-frame-checkout">
+
+        {# Icon variables #}
+        {% if preferenceIcons is not empty %}
+            {% set icon1 = preferenceIcons[0].link %}
+            {% set icon2 = preferenceIcons[1].link %}
+        {% endif %}
+
+        {# Benefits section #}
+        <div class="col-12">
+            <p class="mp-preference__title">
+                {{ l('Discover how practical Mercado Pago is') }}
+            </p>
+            <div class="mp-preference">
+                <p class="mp-preference__text">
+                    <img src="{{ icon1 }}" class="mp-preference__icon" />
+                    <span class="mp-preference__text--bold">{{ l('Pay with your saved cards') }}</span>
+                    {{ l('or account money without filling out personal details.') }}
+                </p>
+                <p class="mp-preference__text">
+                    <img src="{{ icon2 }}" class="mp-preference__icon" />
+                    <span class="mp-preference__text--bold">{{ l('Buy safely') }}</span>
+                    {{ l('with your preferred payment method.') }}
+                </p>
+            </div>
+        </div>
+
+        {# Payment methods logos #}
+        <div class="col-12">
+            <div class="frame-tarjetas">
+                <div class="mp-payment-methods-container">
+                    {% for tarjeta in tarjetas %}
+                        <div class="mp-payment-method-logo-container">
+                            <img src="{{ tarjeta.image }}" class="mp-payment-method-logo-image" />
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        {# Redirect info message #}
+        <div class="col-12">
+            <div class="mp-redirect-info">
+                <p class="mp-redirect-info__text">
+                    <img src="https://http2.mlstatic.com/storage/cpp/static-files/8afdd939-4197-4030-bf24-90a391cc1dd8.png" class="mp-redirect-info__icon" />
+                    <span class="mp-redirect-info__text--bold">{{ l('We will take you to Mercado Pago') }}</span>
+                </p>
+                <p class="mp-redirect-info__text">
+                    {{ l('If you don\'t have an account, you can use your email.') }}
+                </p>
+            </div>
+        </div>
+
+        {# Redirect frame: only shown in redirect mode #}
+        {% if not is_modal %}
+        <div class="col-12 mp-pt-20">
+            <div class="mp-redirect-frame">
+                <img src="{{ module_dir }}views/client/img/redirect_checkout.png" class="img-fluid" />
+                <p>{{ l('We take you to our site to complete the payment') }}</p>
+            </div>
+        </div>
+        {% endif %}
+
+        {# Terms and conditions #}
+        <div class="col-12 mp-pt-15">
+            <label class="mp-pb-5">
+                {{ l('By continuing, you agree to our') }}
+                <a class="mp-link" href="{{ terms_url }}" target="_blank">
+                    {{ l('Terms and Conditions') }}
+                </a>
+            </label>
+        </div>
+
+    </div>
+</div>
+

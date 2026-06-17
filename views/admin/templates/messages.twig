@@ -1,0 +1,44 @@
+{% if confirmations is defined and confirmations|length > 0 %}
+    {% for confirmation in confirmations %}
+        <div class="alert alert-success alert-dismissible mercadopago-flash-message" role="alert" style="margin-bottom: 20px;">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <span class="alert-icon"><i class="icon-check"></i></span>
+            <p class="alert-text">{{ confirmation }}</p>
+        </div>
+    {% endfor %}
+{% endif %}
+
+{% if errors is defined and errors|length > 0 %}
+    {% for error in errors %}
+        <div class="alert alert-danger alert-dismissible mercadopago-flash-message" role="alert" style="margin-bottom: 20px;">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <span class="alert-icon"><i class="icon-times"></i></span>
+            <p class="alert-text">{{ error }}</p>
+        </div>
+    {% endfor %}
+{% endif %}
+
+<script>
+(function() {
+    // Auto-hide flash messages after 5 seconds
+    var flashMessages = document.querySelectorAll('.mercadopago-flash-message');
+    flashMessages.forEach(function(message) {
+        setTimeout(function() {
+            if (message && message.parentNode) {
+                message.style.transition = 'opacity 0.5s ease-out';
+                message.style.opacity = '0';
+                setTimeout(function() {
+                    if (message && message.parentNode) {
+                        message.remove();
+                    }
+                }, 500);
+            }
+        }, 5000);
+    });
+})();
+</script>
+

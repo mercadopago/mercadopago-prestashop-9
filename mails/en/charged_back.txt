@@ -1,0 +1,11 @@
+Hello {firstname} {lastname},
+
+The payment for order {order_name} at {shop_name} has been charged back.
+
+You can review your order and download your invoice in the "Order History" section of your account by clicking on "My account" section of your account.
+
+If you have a guest account, you can track your order through: {guest_tracking_url}
+
+{shop_name} - {shop_url}
+
+{shop_url} powered by PrestaShop&trade;

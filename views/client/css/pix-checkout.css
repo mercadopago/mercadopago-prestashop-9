@@ -1,0 +1,140 @@
+/* MercadoPago PIX Checkout Styles */
+
+.mp-checkout-pix {
+  padding: 10px 0 50px 0;
+}
+
+/* Logo + main text: centered column */
+
+.mp-pix-logo-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 20px 0 16px 0;
+  width: 100%;
+}
+
+.mp-pix-logo {
+  max-width: 200px;
+  height: auto;
+  margin-bottom: 16px;
+}
+
+.mp-pix-text-label {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 18px;
+  text-align-last: center;
+  margin: 0;
+}
+
+/* Info row: icon + gray text */
+
+.mp-pix-info-section {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 16px 0 24px 0;
+}
+
+.mp-badge-info {
+  margin-right: 8px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.mp-pix-text-info {
+  color: rgba(0, 0, 0, 0.25);
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 15px;
+  margin: 0;
+}
+
+/* Document section */
+
+.mp-pix-doc-section {
+  padding: 16px 0 8px 0;
+}
+
+.mp-pix-doc-row {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.mp-pix-doc-type-wrap {
+  flex: 0 0 140px;
+}
+
+.mp-pix-doc-number-wrap {
+  flex: 1;
+}
+
+.mp-pix-doc-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 4px;
+  color: rgba(0, 0, 0, 0.75);
+}
+
+.mp-pix-doc-select {
+  cursor: pointer;
+}
+
+.mp-required {
+  color: #f23d4f;
+  margin-left: 2px;
+}
+
+.mp-input-error {
+  border-color: #f23d4f !important;
+}
+
+@media (max-width: 480px) {
+  .mp-pix-doc-row {
+    flex-direction: column;
+  }
+
+  .mp-pix-doc-type-wrap {
+    flex: unset;
+    width: 100%;
+  }
+}
+
+/* Terms */
+
+.mp-pix-terms-section {
+  text-align: center;
+  padding-bottom: 8px;
+}
+
+.mp-label-checkout-custom {
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.55);
+  margin: 0;
+}
+
+.mp-link-checkout-custom {
+  color: #009ee3;
+  text-decoration: none;
+}
+
+.mp-link-checkout-custom:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 767.98px) {
+  .mp-pix-info-section {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .mp-badge-info {
+    margin-right: 0;
+    margin-bottom: 6px;
+  }
+}

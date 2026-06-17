@@ -1,0 +1,547 @@
+/**
+ * About CSS - Estilos específicos para a aba "Sobre"
+ */
+
+/* ===== COMPONENTES PRINCIPAIS ===== */
+
+/* Painel Principal */
+.mp-panel-landing {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+    background: #f8f9fa;
+}
+
+#tab-about {
+    padding: 0 !important;
+}
+
+#tab-about .mp-section {
+    margin-bottom: 0 !important;
+}
+
+/* ===== BANNER PRINCIPAL ===== */
+
+.mercadopago-banner {
+    padding: 0 !important;
+    margin: 0 !important;
+    min-height: 462px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 0;
+    overflow: hidden;
+    margin-bottom: 0;
+    position: relative;
+}
+
+.mp-banner-gradient {
+    background-image: linear-gradient(to left, rgba(128, 121, 121, 0), #000000);
+}
+
+.mp-label-banner {
+    padding: 40px 74px 74px;
+}
+
+.mp-logo-banner {
+    width: 237px;
+    height: 94px;
+    object-fit: contain;
+    margin-top: 10px;
+    margin-left: -24px;
+}
+
+.mp-title-banner {
+    font-family: sans-serif !important;
+    font-size: 52px !important;
+    font-weight: bold !important;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.2 !important;
+    letter-spacing: normal;
+    color: #000000 !important;
+    margin-top: -13px;
+}
+
+.mp-text-banner {
+    padding-top: 5px;
+    font-family: sans-serif !important;
+    font-size: 18px !important;
+    font-weight: normal !important;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.25 !important;
+    letter-spacing: normal;
+    color: #737373 !important;
+}
+
+.mp-btn-banner {
+    border-radius: 4px !important;
+    font-size: 16px !important;
+    padding: 12px 40px !important;
+    color: #ffffff !important;
+    border: 1px solid #3483FA !important;
+    background-color: #3483FA !important;
+    margin-top: 15px !important;
+    text-decoration: none !important;
+    transition: all 0.3s ease;
+}
+
+.mp-btn-banner:hover {
+    border: 1px solid #2968C8 !important;
+    background-color: #2968C8 !important;
+    color: #ffffff !important;
+    text-decoration: none !important;
+}
+
+/* ===== SEÇÃO DE PARCELAS ===== */
+
+.mercadopago-installments {
+    background-color: #f5f5f5;
+    padding: 50px 80px 40px;
+}
+
+.mp-row-installments {
+    box-shadow: 0 5px 10px 0 rgba(155, 169, 187, 0.3);
+    background-color: #ffffff;
+}
+
+.row-text-installments {
+    display: flex;
+    align-items: center;
+    height: 265px;
+}
+
+.text-installments {
+    font-family: sans-serif;
+    font-size: 24px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.25;
+    letter-spacing: normal;
+    color: #737373;
+    padding-left: 74px !important;
+    margin-bottom: 0 !important;
+}
+
+.row-img-installments {
+    display: flex;
+    align-items: center;
+    height: 265px;
+    justify-content: end;
+}
+
+.mp-img-tarjetitas {
+    width: 449px;
+    height: 237px;
+    margin-top: 31px;
+    margin-right: 74px;
+}
+
+.mp-info-installments {
+    font-family: sans-serif !important;
+    font-size: 18px !important;
+    font-weight: normal !important;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.22 !important;
+    letter-spacing: normal;
+    color: #191919 !important;
+    padding-top: 30px;
+}
+
+/* ===== SEÇÃO DE BENEFÍCIOS ===== */
+
+.mercadopago-beneficios {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 70px 0;
+    background: #FFFFFF;
+}
+
+.mp-title-beneficios {
+    font-family: sans-serif !important;
+    font-size: 25px !important;
+    font-weight: normal !important;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.25 !important;
+    letter-spacing: normal;
+    color: #191919 !important;
+    padding-bottom: 20px;
+    margin-top: 35px !important;
+    margin-bottom: -6.5px !important;
+}
+
+.mp-panel-text-icon {
+    display: flex;
+    align-items: center;
+}
+
+.mp-panel-text-icon .icon-mercadopago {
+    width: auto;
+    height: 24px;
+}
+
+.mp-beneficios-icon {
+    display: flex;
+    align-items: center;
+    width: fit-content;
+}
+
+.mp-beneficios-icon img {
+    width: auto;
+    height: 24px;
+}
+
+.mp-panel-title {
+    display: flex;
+    width: 100%;
+}
+
+.mp-panel-title h2 {
+    margin-top: 35px !important;
+}
+
+.icon-mercadopago {
+    display: inline-block;
+    padding-right: 15px;
+}
+
+.mp-text-beneficios {
+    font-family: sans-serif !important;
+    font-size: 15px !important;
+    font-weight: normal !important;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.25 !important;
+    letter-spacing: normal;
+    color: #737373 !important;
+    padding: 9px 0;
+    display: inline-block;
+}
+
+.mp-img-beneficios {
+    width: 354px;
+    height: 343px;
+    margin-top: -15px;
+}
+
+.mp-img-puedohacer {
+    width: auto;
+    height: 343px;
+    padding-right: 20px;
+    float: right;
+}
+
+/* ===== SEÇÃO DE RECEBIMENTO DE PAGAMENTOS ===== */
+
+.mercadopago-recibopagos {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f5f6f8 !important;
+    padding: 60px 150px 50px;
+    text-align: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 0;
+    margin-bottom: 0;
+}
+
+.mp-title-recibopagos {
+    font-family: sans-serif !important;
+    font-size: 25px !important;
+    font-weight: normal !important;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.25 !important;
+    letter-spacing: normal;
+    color: #191919 !important;
+    padding-bottom: 25px;
+    margin-top: 0 !important;
+}
+
+.mp-number-recibopagos {
+    border-radius: 100%;
+    border: solid 1px #979797;
+    display: block;
+    width: 35px;
+    height: 35px;
+    margin: 0 auto 8px !important;
+    font-size: 18px;
+    font-weight: normal;
+    border-color: #3483FA !important;
+    padding-top: 3px;
+}
+
+.mp-number-recibopagos-after::after {
+    content: '';
+    width: 115px;
+    height: 1px;
+    display: block;
+    background-color: #3483FA;
+    margin-top: -16px;
+    margin-left: 34px;
+}
+
+.mp-number-recibopagos-before::before {
+    content: '';
+    width: 115px;
+    height: 1px;
+    display: block;
+    float: left;
+    background-color: #3483FA;
+    margin-top: 13px;
+    margin-left: -115px;
+}
+
+.mp-number-recibopagos-before-green::before {
+    content: '';
+    width: 115px;
+    height: 1px;
+    display: block;
+    float: left;
+    background-color: #3483FA;
+    margin-top: 13px;
+    margin-left: -115px;
+}
+
+/* ===== RODAPÉ ===== */
+
+.mercadopago-footer {
+    object-fit: contain;
+    background-color: #009ee3;
+    text-align: center;
+    padding: 60px 0 70px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 0;
+    margin-bottom: 0;
+    position: relative;
+    overflow: hidden;
+    background-image: url('https://http2.mlstatic.com/storage/cpp/static-files/8351df1d-7a12-4803-a876-69fe7dc34969.jpg');
+}
+
+.mercadopago-footer .row {
+    position: relative;
+    z-index: 2;
+}
+
+.mp-title-footer {
+    font-family: sans-serif !important;
+    font-size: 25px !important;
+    font-weight: 400 !important;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.25 !important;
+    letter-spacing: normal !important;
+    color: #ffffff !important;
+}
+
+.mp-btn-footer {
+    border-radius: 4px !important;
+    font-size: 16px !important;
+    padding: 12px 40px !important;
+    color: #3483FA !important;
+    border-color: #FFFFFF !important;
+    background-color: #FFFFFF !important;
+    margin-top: 30px !important;
+}
+
+.mp-btn-footer:hover {
+    background-color: #E3EEFC !important;
+}
+
+/* ===== SEÇÃO DE PARCEIROS ===== */
+
+.mercadopago-partner {
+    background-color: #f5f6f8 !important;
+    position: relative;
+    background-color: #fff;
+    border: 1px solid #dbe6e9;
+    border-radius: 5px;
+    -webkit-box-shadow: 0 0 4px 0 rgba(0, 0, 0, .06);
+    box-shadow: 0 0 4px 0 rgba(0, 0, 0, .06);
+}
+
+.mp-left-partner {
+    display: flex;
+    align-items: center;
+    padding: 10px 0 10px 20px !important;
+}
+
+.mp-right-partner {
+    padding: 20px 25px 5px 0 !important;
+    text-align: right;
+}
+
+.mp-right-partner a {
+    color: #3483fa !important;
+    text-decoration: none !important;
+}
+
+.mp-right-partner a:hover {
+    text-decoration: underline !important;
+}
+
+.mp-img-partner {
+    width: 40px;
+    height: auto;
+    margin-right: 15px;
+}
+
+/* ===== RESPONSIVIDADE ===== */
+
+@media (max-width: 768px) {
+    .mp-panel-landing {
+        padding: 0 16px;
+    }
+
+    .mercadopago-banner {
+        min-height: 300px;
+    }
+
+    .mp-label-banner {
+        padding: 20px 30px 30px;
+    }
+
+    .mp-logo-banner {
+        width: 180px;
+        height: auto;
+    }
+
+    .mp-title-banner {
+        font-size: 2.5rem !important;
+    }
+
+    .mp-text-banner {
+        font-size: 1.1rem !important;
+    }
+
+    .mercadopago-installments,
+    .mercadopago-beneficios,
+    .mercadopago-recibopagos {
+        padding: 24px;
+    }
+
+    .mp-row-installments {
+        flex-direction: column;
+        gap: 24px;
+    }
+
+    .row-img-installments {
+        flex: none;
+    }
+
+    .mp-title-beneficios {
+        font-size: 1.6rem !important;
+    }
+
+    .mp-title-footer {
+        font-size: 1.8rem !important;
+    }
+
+    .mercadopago-recibopagos {
+        padding: 40px 20px;
+    }
+
+    .mp-number-recibopagos-after::after,
+    .mp-number-recibopagos-before::before,
+    .mp-number-recibopagos-before-green::before {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .mercadopago-banner {
+        min-height: 250px;
+    }
+
+    .mp-label-banner {
+        padding: 15px 20px 20px;
+    }
+
+    .mp-logo-banner {
+        width: 150px;
+    }
+
+    .mp-title-banner {
+        font-size: 2rem !important;
+    }
+
+    .mp-text-banner {
+        font-size: 1rem !important;
+    }
+
+    .mp-btn-banner,
+    .mp-btn-footer {
+        padding: 10px 20px;
+        font-size: 14px !important;
+    }
+
+    .mercadopago-installments,
+    .mercadopago-beneficios,
+    .mercadopago-recibopagos {
+        padding: 20px;
+    }
+
+    .mp-title-beneficios {
+        font-size: 1.4rem !important;
+    }
+
+    .mp-title-footer {
+        font-size: 1.6rem !important;
+    }
+}
+
+/* ===== COMPATIBILIDADE COM PRESTASHOP 9 ===== */
+
+.tab-pane {
+    display: none;
+}
+
+.tab-pane.active {
+    display: block;
+}
+
+.tab-pane.fade {
+    opacity: 0;
+    transition: opacity 0.15s linear;
+}
+
+.tab-pane.fade.in {
+    opacity: 1;
+}
+
+/* ===== ESTILOS PARA BOTÕES ===== */
+
+.btn {
+    text-decoration: none !important;
+    border-bottom: none !important;
+}
+
+.btn:hover {
+    text-decoration: none !important;
+    border-bottom: none !important;
+}
+
+/* ===== ESTILOS PARA TEXTOS ===== */
+
+.mp-text-checkout-body {
+    font-size: 14px !important;
+    font-weight: 300 !important;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.5;
+    letter-spacing: normal;
+    color: #737373;
+}
+
