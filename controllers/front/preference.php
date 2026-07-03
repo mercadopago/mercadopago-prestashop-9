@@ -22,6 +22,13 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
+// Necessário: este controller depende da classe base, que é autoloaded via
+// classmap. O PHP-Scoper embrulha o arquivo dela (sem namespace próprio) e o
+// class_alias() resultante só roda após ela ser incluída, então o autoload por
+// classmap nunca a encontra pelo nome global (ver scoper.inc.php). Não remover
+// achando redundante com o autoload.
+require_once __DIR__ . '/AbstractMercadopagoModuleFrontController.php';
+
 use MercadoPago\Service\Preference\PreferenceService;
 use MercadoPago\Client\MPApi;
 use MercadoPago\Repository\MPTransactionRepository;

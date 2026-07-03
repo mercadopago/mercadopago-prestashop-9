@@ -166,3 +166,6 @@ docs/
 # ===========================================
 mutagen.yml
 mutagen.yml.lock
+
+# PHP-Scoper (baixado no build)
+/bin/php-scoper.phar

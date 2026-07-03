@@ -97,7 +97,11 @@ class InstallationService
                     $migrator->migrate($singlePlan, $migratorConfiguration);
                 } catch (NoMigrationsToExecute|NoMigrationsFoundWithCriteria $e) {
                     // nothing to do
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
+                    // \Throwable, not just \Exception: a broken migration class
+                    // (e.g. scoper "Class not found") throws \Error, which would
+                    // otherwise escape uncaught and abort install() mid-loop,
+                    // leaving later tables (and createOrderStates()) never created.
                     error_log('Migration ' . $item->getVersion() . ' failed: ' . $e->getMessage());
                     $hasErrors = true;
                 }
@@ -108,7 +112,7 @@ class InstallationService
             return !$hasErrors;
         } catch (NoMigrationsToExecute|NoMigrationsFoundWithCriteria $e) {
             return true;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             error_log('Migration setup error: ' . $e->getMessage());
             return false;
         }
@@ -186,8 +190,8 @@ class InstallationService
                 foreach (['.html', '.txt'] as $ext) {
                     $src = $srcDir . $template . $ext;
                     $dst = $destDir . $template . $ext;
-                    if (file_exists($src) && !file_exists($dst)) {
-                        copy($src, $dst);
+                    if (file_exists($src) && !file_exists($dst) && !copy($src, $dst)) {
+                        error_log("MercadoPago: failed to copy mail template {$src} to {$dst}");
                     }
                 }
             }
@@ -289,7 +293,12 @@ class InstallationService
             \Db::getInstance()->execute(
                 'DROP TABLE IF EXISTS `' . _DB_PREFIX_ . 'doctrine_migration_versions`'
             );
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
+            // \Throwable (not just \Exception): a broken migration class (e.g. a
+            // scoper misconfiguration causing "Class not found") throws \Error,
+            // which does NOT extend \Exception. Left uncaught, it fatals mid-request
+            // and breaks the AdminModules uninstall AJAX JSON response instead of
+            // falling back to the raw DROP TABLE below.
             error_log('Migration rollback error: ' . $e->getMessage());
             $sql = 'DROP TABLE IF EXISTS `' . _DB_PREFIX_ . 'mp_transactions`,
                                       `' . _DB_PREFIX_ . 'mp_transaction`,
@@ -307,7 +316,7 @@ class InstallationService
 
     /**
      * Get Doctrine DBAL connection
-     * Tries to get from PrestaShop container first, falls back to creating from PrestaShop's DB connection
+     * Always builds our own connection from PrestaShop's DB constants — see note below.
      * Connection is cached to avoid creating multiple instances
      *
      * @return Connection
@@ -318,26 +327,17 @@ class InstallationService
             return $this->connection;
         }
 
-        // Try to get connection from PrestaShop container
-        try {
-            $context = \Context::getContext();
-            if ($context && isset($context->controller)) {
-                $controller = $context->controller;
-                if (method_exists($controller, 'getContainer')) {
-                    $container = $controller->getContainer();
-                    if ($container && $container->has('doctrine.dbal.default_connection')) {
-                        $this->connection = $container->get('doctrine.dbal.default_connection');
-                        return $this->connection;
-                    }
-                }
-            }
-        } catch (\Exception $e) {
-            // Container not available, continue to fallback
-        }
-
-        // Fora do contexto web (ex.: CLI) o container não está disponível. O DBAL 3.x
-        // não aceita injeção de um PDO existente, então criamos a conexão a partir dos
-        // parâmetros de banco do PrestaShop (mesmo banco usado pelo módulo).
+        // NÃO reaproveitar 'doctrine.dbal.default_connection' do container do PS:
+        // ele retorna PrestaShopBundle\Doctrine\DatabaseConnection, que vem do
+        // Doctrine DO CORE (sem prefixo). Nosso Doctrine é isolado pelo PHP-Scoper
+        // (MercadoPagoVendor\Doctrine\DBAL\Connection) exatamente para não colidir
+        // com o do core — são duas hierarquias de classe incompatíveis. Passar o
+        // objeto do container para cá dispara TypeError: "Return value must be of
+        // type MercadoPagoVendor\Doctrine\DBAL\Connection, PrestaShopBundle\
+        // Doctrine\DatabaseConnection returned". Por isso sempre criamos nossa
+        // própria conexão a partir das constantes de banco do PrestaShop (mesmo
+        // banco usado pelo módulo). DBAL 3.x também não aceita injeção de um PDO
+        // já existente, então DriverManager::getConnection() é o único caminho.
         if (!defined('_DB_SERVER_') || !defined('_DB_NAME_') || !defined('_DB_USER_')) {
             throw new \RuntimeException('Unable to build migration connection: PrestaShop DB constants unavailable');
         }
