@@ -39,7 +39,7 @@ class TemplateRenderer
     private $module;
 
     /**
-     * @var mixed
+     * @var \Twig\Environment|null
      */
     private $twig;
 
@@ -57,80 +57,35 @@ class TemplateRenderer
     /**
      * Initialize Twig environment
      *
-     * @return mixed
+     * Twig is a PrestaShop core dependency (not bundled by this module), so its
+     * namespace must stay excluded from PHP-Scoper (see scoper.inc.php) — Twig
+     * classes are exposed globally at runtime by PS itself.
+     *
+     * We always use our own Twig instance pointing at views/ instead of the PS
+     * container Twig: the container Twig has no loader path for our templates, and
+     * our templates only need the l() translation function we register below.
+     *
+     * @return \Twig\Environment|null
      */
-    private function initializeTwig()
+    private function initializeTwig(): ?\Twig\Environment
     {
         try {
-            // Try to use PrestaShop's Twig container first
-            $context = \Context::getContext();
-            if ($context && isset($context->controller)) {
-                $controller = $context->controller;
-                if (method_exists($controller, 'getContainer')) {
-                    try {
-                        $container = $controller->getContainer();
-                        if ($container && $container->has('twig')) {
-                            $twig = $container->get('twig');
-                            // Register our translation function if PrestaShop's Twig doesn't have one.
-                            // Twig 3's getFunction() returns null when the function is missing
-                            // (it does not throw, unlike Twig 1/2), so check for null directly.
-                            if ($twig->getFunction('l') === null) {
-                                $module = $this->module;
-                                $lFunction = new \Twig\TwigFunction('l', function (string $string) use ($module) {
-                                    return $module->l($string);
-                                });
-                                $twig->addFunction($lFunction);
-                            }
-                            return $twig;
-                        }
-                    } catch (\Exception $e) {
-                        // Container not available, continue to fallback
-                    }
-                }
-            }
-
-            // Fallback: Try to load Twig from PrestaShop vendor
-            if (!class_exists('\Twig\Loader\FilesystemLoader') && !class_exists('Twig_Loader_Filesystem')) {
-                $prestashopAutoload = _PS_ROOT_DIR_ . '/vendor/autoload.php';
-                if (file_exists($prestashopAutoload) && !class_exists('\Twig\Loader\FilesystemLoader')) {
-                    require_once $prestashopAutoload;
-                }
-                
-                if (!class_exists('\Twig\Loader\FilesystemLoader') && !class_exists('Twig_Loader_Filesystem')) {
-                    return null;
-                }
-            }
-
             $templatePath = $this->module->getLocalPath() . 'views/';
-            
+
             if (!is_dir($templatePath)) {
                 return null;
             }
 
-            // Use namespace or legacy class names
-            $loaderClass = class_exists('\Twig\Loader\FilesystemLoader')
-                ? '\Twig\Loader\FilesystemLoader'
-                : 'Twig_Loader_Filesystem';
-            $envClass = class_exists('\Twig\Environment')
-                ? '\Twig\Environment'
-                : 'Twig_Environment';
-            $functionClass = class_exists('\Twig\TwigFunction')
-                ? '\Twig\TwigFunction'
-                : 'Twig_SimpleFunction';
-
-            $loader = new $loaderClass($templatePath);
-            $twig = new $envClass($loader, [
+            $loader = new \Twig\Loader\FilesystemLoader($templatePath);
+            $twig = new \Twig\Environment($loader, [
                 'cache' => false,
-                'debug' => false,
                 'auto_reload' => true,
             ]);
 
-            // Add translation function
             $module = $this->module;
-            $lFunction = new $functionClass('l', function (string $string) use ($module) {
+            $twig->addFunction(new \Twig\TwigFunction('l', function (string $string) use ($module): string {
                 return $module->l($string);
-            });
-            $twig->addFunction($lFunction);
+            }));
 
             return $twig;
         } catch (\Throwable $e) {
