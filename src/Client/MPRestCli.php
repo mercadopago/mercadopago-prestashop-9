@@ -39,6 +39,7 @@ declare(strict_types=1);
 
 namespace MercadoPago\Client;
 
+use MercadoPago\Service\Configuration\ConfigurationDataService;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
@@ -65,19 +66,20 @@ class MPRestCli
     private static function exec($method, $uri, $data, $headers, $uri_base)
     {
         $client = HttpClient::create();
+        $config = new ConfigurationDataService();
         $headers_default = [
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
             'x-platform-id' => self::PLATFORM_ID,
             'x-product-id' => self::PRODUCT_ID,
-            'x-integrator-id' => \Configuration::get('MERCADOPAGO_INTEGRATOR_ID'),
+            'x-integrator-id' => $config->get('MERCADOPAGO_INTEGRATOR_ID'),
             'User-Agent' => 'MercadoPago Prestashop v' . MP_VERSION
         ];
         is_array($headers) ? $headers = array_merge($headers_default, $headers): $headers = $headers_default;
-        $isProd = (bool) \Configuration::get('MERCADOPAGO_PROD_STATUS');
+        $isProd = $config->isProductionMode();
         $accessToken = $isProd
-            ? \Configuration::get('MERCADOPAGO_ACCESS_TOKEN')
-            : \Configuration::get('MERCADOPAGO_SANDBOX_ACCESS_TOKEN');
+            ? $config->get('MERCADOPAGO_ACCESS_TOKEN')
+            : $config->get('MERCADOPAGO_SANDBOX_ACCESS_TOKEN');
 
         $options = [
             'headers' => $headers,

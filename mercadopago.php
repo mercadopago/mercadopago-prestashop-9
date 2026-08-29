@@ -94,6 +94,12 @@ class mercadopago extends PaymentModule
      */
     public function getContent(): string
     {
+        if (\Shop::isFeatureActive() && \Shop::getContext() !== \Shop::CONTEXT_SHOP) {
+            return $this->displayError(
+                $this->l('Select a single store in the multistore selector before configuring Mercado Pago. Each store must use its own credentials.')
+            );
+        }
+
         if (\Tools::isSubmit('ajax') && \Tools::getValue('action') === 'getCredentials') {
             $this->ajaxProcessGetCredentials();
         }

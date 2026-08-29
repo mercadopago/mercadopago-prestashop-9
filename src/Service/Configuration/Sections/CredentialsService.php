@@ -740,13 +740,14 @@ class CredentialsService
     private static function onboardingHttpRequest(string $method, string $uri, ?array $data, array $customHeaders): array
     {
         $productIdHeader = ($method === 'POST') ? 'x-product-id: ' . MPRestCli::PRODUCT_ID : '';
+        $config = new ConfigurationDataService();
 
         $headersDefault = array_filter([
             $productIdHeader,
             'Accept: application/json',
             'Content-Type: application/json',
             'x-platform-id: ' . MPRestCli::PLATFORM_ID,
-            'x-integrator-id:' . (string) Configuration::get('MERCADOPAGO_INTEGRATOR_ID', ''),
+            'x-integrator-id:' . (string) $config->get('MERCADOPAGO_INTEGRATOR_ID', ''),
         ]);
 
         $headers = array_merge($headersDefault, $customHeaders);
