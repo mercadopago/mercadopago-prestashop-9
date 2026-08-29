@@ -32,6 +32,7 @@ require_once __DIR__ . '/AbstractMercadopagoModuleFrontController.php';
 use MercadoPago\Service\Preference\PreferenceService;
 use MercadoPago\Client\MPApi;
 use MercadoPago\Repository\MPTransactionRepository;
+use MercadoPago\Service\Configuration\ConfigurationDataService;
 
 class MercadopagoPreferenceModuleFrontController extends AbstractMercadopagoModuleFrontController
 {
@@ -80,7 +81,7 @@ class MercadopagoPreferenceModuleFrontController extends AbstractMercadopagoModu
                     exit;
                 }
 
-                $isProd = (bool) \Configuration::get('MERCADOPAGO_PROD_STATUS');
+                $isProd = (new ConfigurationDataService())->isProductionMode();
                 $initPoint = $isProd
                     ? $preferenceResponse['init_point']
                     : ($preferenceResponse['sandbox_init_point'] ?? $preferenceResponse['init_point']);

@@ -39,6 +39,8 @@ declare(strict_types=1);
 
 namespace MercadoPago\Client;
 
+use MercadoPago\Service\Configuration\ConfigurationDataService;
+
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -69,10 +71,11 @@ class MPApi
     public function createYapeToken(string $phoneNumber, string $otp, int $cartId): array
     {
         try {
-            $isProd = (bool) \Configuration::get('MERCADOPAGO_PROD_STATUS');
+            $config = new ConfigurationDataService();
+            $isProd = $config->isProductionMode();
             $publicKey = $isProd
-                ? \Configuration::get('MERCADOPAGO_PUBLIC_KEY')
-                : \Configuration::get('MERCADOPAGO_SANDBOX_PUBLIC_KEY');
+                ? $config->get('MERCADOPAGO_PUBLIC_KEY')
+                : $config->get('MERCADOPAGO_SANDBOX_PUBLIC_KEY');
 
             $uri = '/platforms/pci/yape/v1/payment?public_key=' . rawurlencode((string) $publicKey);
             $payload = [
@@ -118,11 +121,12 @@ class MPApi
      */
     public function getAccessToken()
     {
-        if (\Configuration::get('MERCADOPAGO_PROD_STATUS') == true) {
-            return \Configuration::get('MERCADOPAGO_ACCESS_TOKEN');
+        $config = new ConfigurationDataService();
+        if ($config->isProductionMode()) {
+            return $config->get('MERCADOPAGO_ACCESS_TOKEN');
         }
 
-        return \Configuration::get('MERCADOPAGO_SANDBOX_ACCESS_TOKEN');
+        return $config->get('MERCADOPAGO_SANDBOX_ACCESS_TOKEN');
     }
 
     public function createPreference(array $preference)

@@ -41,6 +41,7 @@ namespace MercadoPago\Service\Order;
 
  use MercadoPago\Client\MPApi;
  use MercadoPago\Repository\MPTransactionRepository;
+ use MercadoPago\Service\Configuration\ConfigurationDataService;
  use \Customer;
  use \Tools;
 
@@ -710,7 +711,7 @@ class AbstractOrderService
             $idCustomer = (int) $cart->id_customer;
             $amount = (string) \Tools::ps_round((float) $cart->getOrderTotal(), 2);
             $notificationUrl = $notificationUrl ?: $orderResponse['notification_url'] ?? $this->getNotificationUrl($cart);
-            $isTest = !((bool) \Configuration::get('MERCADOPAGO_PROD_STATUS'));
+            $isTest = !(new ConfigurationDataService())->isProductionMode();
             
             $existingId = $this->getExistingTransactionId($orderResponse);
             $module = \Module::getInstanceByName('mercadopago');
