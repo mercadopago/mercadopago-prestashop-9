@@ -1,0 +1,23 @@
+CHANGELOG.md
+  s_a73155d691d422::t_3570fe8894d2a1 11-15
+composer.json
+  s_a73155d691d422::t_ea2932eb00002d 3
+mercadopago.php
+  s_a73155d691d422::t_94cd466c0d471f 27,58,210-212,257,268,279,290,301,312,327,338,349
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "e5b3ae44c5c0419f30a25ebedb0cd984dd65212d",
+  "prompts": {},
+  "sessions": {
+    "s_a73155d691d422": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a163ad-d528-7d21-a5b6-8320a73bb70a",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Fernando Lira <fernando.lira@mercadolivre.com>"
+    }
+  }
+}
