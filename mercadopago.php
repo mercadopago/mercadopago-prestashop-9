@@ -24,7 +24,7 @@ use MercadoPago\Service\Checkout\Methods\PseCheckoutService;
 use MercadoPago\Service\Checkout\Methods\TicketCheckoutService;
 use MercadoPago\Service\Checkout\Methods\YapeCheckoutService;
 
-define('MP_VERSION', '5.0.4');
+define('MP_VERSION', '5.0.5');
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -55,7 +55,7 @@ class mercadopago extends PaymentModule
         $this->name = 'mercadopago';
         $this->tab = 'payments_gateways';
         // Always update, because prestashop doesn't accept version coming from another variable (MP_VERSION)
-        $this->version = '5.0.4';
+        $this->version = '5.0.5';
         $this->author = 'MercadoPago';
         $this->need_instance = 1;
         $this->bootstrap = true;
@@ -95,12 +95,7 @@ class mercadopago extends PaymentModule
      */
     public function uninstall(): bool
     {
-        $installationService = new MercadoPago\Service\Installation\InstallationService($this);
-
-        $installationService->deleteOrderStates();
-
-        return $installationService->dropTables()
-            && parent::uninstall();
+        return parent::uninstall();
     }
 
     /**

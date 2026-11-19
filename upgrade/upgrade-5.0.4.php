@@ -26,5 +26,15 @@ function upgrade_module_5_0_4($module): bool
 {
     $installationService = new MercadoPago\Service\Installation\InstallationService($module);
 
-    return $installationService->createTables();
+    if ($installationService->createTables()) {
+        return true;
+    }
+
+    // PrestaShop 9 records the target version after the runner returns false.
+    // Throw to stop that write when upgrading from versions before 5.0.4.
+    if (!$module->disable(true)) {
+        throw new RuntimeException('Mercado Pago upgrade failed and the module could not be disabled for all shops.');
+    }
+
+    throw new RuntimeException('Mercado Pago upgrade failed: database schema is incomplete. Repair the schema and retry the upgrade.');
 }

@@ -71,12 +71,15 @@ class InstallationService
     public function createTables(): bool
     {
         try {
+            $this->ensureCoreTables();
             $dependencyFactory = $this->getDependencyFactory();
             $dependencyFactory->getMetadataStorage()->ensureInitialized();
 
             $migrationRepository = $dependencyFactory->getMigrationRepository();
             if (count($migrationRepository->getMigrations()) === 0) {
-                return true;
+                error_log('MercadoPago: no migrations found');
+
+                return false;
             }
 
             $version = $dependencyFactory->getVersionAliasResolver()->resolveVersionAlias('latest');
@@ -84,7 +87,7 @@ class InstallationService
             $plan = $planCalculator->getPlanUntilVersion($version);
 
             if (count($plan) === 0) {
-                return true;
+                return $this->validateCoreTables();
             }
 
             $migratorConfiguration = new MigratorConfiguration();
@@ -102,18 +105,151 @@ class InstallationService
                     // (e.g. scoper "Class not found") throws \Error, which would
                     // otherwise escape uncaught and abort install() mid-loop,
                     // leaving later tables (and createOrderStates()) never created.
-                    error_log('Migration ' . $item->getVersion() . ' failed: ' . $e->getMessage());
+                    error_log('MercadoPago: migration ' . $item->getVersion() . ' failed (' . get_class($e) . ')');
                     $hasErrors = true;
                 }
             }
 
             $this->setDefaultCountryFromCurrency();
 
-            return !$hasErrors;
+            return !$hasErrors && $this->validateCoreTables();
         } catch (NoMigrationsToExecute|NoMigrationsFoundWithCriteria $e) {
+            return $this->validateCoreTables();
+        } catch (\Throwable $e) {
+            error_log('MercadoPago: schema initialization failed (' . get_class($e) . ')');
+
+            return false;
+        }
+    }
+
+    /** Restore missing core tables and additive payment fields without deleting data. */
+    private function ensureCoreTables(): void
+    {
+        $connection = $this->getConnection();
+        $connection->executeStatement('CREATE TABLE IF NOT EXISTS ' . $connection->quoteIdentifier(_DB_PREFIX_ . 'mp_module') . ' (
+            `id_mp_module` INT(11) NOT NULL AUTO_INCREMENT,
+            `version` VARCHAR(20) NOT NULL,
+            `updated` TINYINT(1) NULL,
+            `evaluation` VARCHAR(20) NULL,
+            `comments` TINYTEXT NULL,
+            `recommend` TINYINT(1) NULL,
+            `created_at` DATETIME NOT NULL,
+            `updated_at` DATETIME NULL,
+            PRIMARY KEY (`id_mp_module`)
+        ) ENGINE = InnoDB DEFAULT CHARSET=utf8;');
+        $connection->executeStatement('CREATE TABLE IF NOT EXISTS ' . $connection->quoteIdentifier(_DB_PREFIX_ . 'mp_transactions') . ' (
+            `id_mp_transaction` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+            `cart_id` INT(10) UNSIGNED NOT NULL,
+            `order_id` VARCHAR(100) NULL,
+            `customer_id` INT(11) UNSIGNED NOT NULL,
+            `total` DECIMAL(15,2) NULL,
+            `mp_module_id` INT(11) NOT NULL,
+            `payment_id` VARCHAR(100) NULL,
+            `payment_method` VARCHAR(100) NULL,
+            `payment_type` VARCHAR(100) NULL,
+            `payment_status` VARCHAR(100) NULL,
+            `payment_amount` VARCHAR(100) NULL,
+            `merchant_order_id` VARCHAR(100) NULL,
+            `notification_url` TEXT NULL,
+            `is_payment_test` TINYINT(1) NULL,
+            `received_webhook` TINYINT(1) NULL,
+            `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            `updated_at` DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
+            PRIMARY KEY (`id_mp_transaction`),
+            INDEX `idx_cart_id` (`cart_id`),
+            INDEX `idx_order_id` (`order_id`),
+            INDEX `idx_merchant_order_id` (`merchant_order_id`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT="Transações MercadoPago (igual PPCO-3679)"');
+        $tableName = _DB_PREFIX_ . 'mp_transactions';
+        $table = $connection->createSchemaManager()->listTableDetails($tableName);
+        $columns = [
+            'pix_qr_code' => 'TEXT NULL',
+            'pix_qr_code_base64' => 'TEXT NULL',
+            'pix_expiration' => 'VARCHAR(32) NULL',
+            'ticket_url' => 'TEXT NULL',
+            'digitable_line' => 'TEXT NULL',
+            'pse_payment_url' => 'TEXT NULL',
+        ] + \MercadoPago\Repository\PreferenceGuardRepository::columns();
+        $quotedTable = $connection->quoteIdentifier($tableName);
+        if ($table->hasColumn('order_id')) {
+            $orderId = $table->getColumn('order_id');
+            $type = $orderId->getType()->getName();
+            if (in_array($type, ['integer', 'smallint', 'bigint'], true)
+                || ($type === 'string' && $orderId->getLength() < 100)) {
+                $connection->executeStatement('ALTER TABLE ' . $quotedTable . ' MODIFY `order_id` VARCHAR(100) NULL');
+            }
+        }
+        foreach ($columns as $name => $definition) {
+            if (!$table->hasColumn($name)) {
+                $connection->executeStatement('ALTER TABLE ' . $quotedTable . ' ADD COLUMN '
+                    . $connection->quoteIdentifier($name) . ' ' . $definition);
+            }
+        }
+        $table = $connection->createSchemaManager()->listTableDetails($tableName);
+        foreach (['uk_mp_guard_preference' => 'guard_preference_id', 'uk_mp_guard_review' => 'guard_review_payment_id'] as $index => $column) {
+            if (!$table->hasIndex($index)) {
+                $connection->executeStatement('ALTER TABLE ' . $quotedTable . ' ADD UNIQUE INDEX '
+                    . $connection->quoteIdentifier($index) . ' (' . $connection->quoteIdentifier($column) . ')');
+            }
+        }
+    }
+
+    /** Fail closed when an existing table cannot support the module's writes. */
+    private function validateCoreTables(): bool
+    {
+        try {
+            $manager = $this->getConnection()->createSchemaManager();
+            $required = [
+                'mp_module' => ['id_mp_module', 'version', 'updated', 'evaluation', 'comments', 'recommend', 'created_at', 'updated_at'],
+                'mp_transactions' => array_merge([
+                    'id_mp_transaction', 'cart_id', 'order_id', 'customer_id', 'total', 'mp_module_id',
+                    'payment_id', 'payment_method', 'payment_type', 'payment_status', 'payment_amount',
+                    'merchant_order_id', 'notification_url', 'is_payment_test', 'received_webhook', 'created_at', 'updated_at',
+                    'pix_qr_code', 'pix_qr_code_base64', 'pix_expiration', 'ticket_url', 'digitable_line', 'pse_payment_url',
+                ], array_keys(\MercadoPago\Repository\PreferenceGuardRepository::columns())),
+            ];
+            foreach ($required as $name => $columns) {
+                $table = $manager->listTableDetails(_DB_PREFIX_ . $name);
+                foreach ($columns as $column) {
+                    if (!$table->hasColumn($column)) {
+                        error_log('MercadoPago: required schema column missing');
+
+                        return false;
+                    }
+                }
+                $minimumLengths = $name === 'mp_module' ? [
+                    'version' => 20, 'evaluation' => 20,
+                ] : [
+                    'order_id' => 100, 'payment_id' => 100, 'payment_method' => 100,
+                    'payment_type' => 100, 'payment_status' => 100, 'payment_amount' => 100,
+                    'merchant_order_id' => 100, 'pix_expiration' => 32,
+                    'guard_preference_id' => 100, 'preference_items_sha256' => 64,
+                    'preference_currency_iso' => 3, 'guard_status' => 24, 'guard_reason' => 32,
+                    'guard_payment_id' => 100, 'guard_review_payment_id' => 100,
+                ];
+                foreach ($minimumLengths as $column => $length) {
+                    $definition = $table->getColumn($column);
+                    if ($definition->getType()->getName() !== 'string' || $definition->getLength() < $length) {
+                        error_log('MercadoPago: schema column has incompatible type or length: ' . $name . '.' . $column);
+
+                        return false;
+                    }
+                }
+                if ($name === 'mp_transactions') {
+                    foreach (['uk_mp_guard_preference' => 'guard_preference_id', 'uk_mp_guard_review' => 'guard_review_payment_id'] as $index => $column) {
+                        if (!$table->hasIndex($index) || !$table->getIndex($index)->isUnique()
+                            || $table->getIndex($index)->getColumns() !== [$column]) {
+                            error_log('MercadoPago: required schema index invalid');
+
+                            return false;
+                        }
+                    }
+                }
+            }
+
             return true;
         } catch (\Throwable $e) {
-            error_log('Migration setup error: ' . $e->getMessage());
+            error_log('MercadoPago: schema validation failed (' . get_class($e) . ')');
 
             return false;
         }
@@ -140,11 +276,26 @@ class InstallationService
             $configKey = 'MERCADOPAGO_STATUS_' . $index;
             $existingId = (int) \Configuration::get($configKey);
 
-            if ($existingId > 0 && $this->orderStateExists($existingId)) {
+            if ($existingId > 0 && $this->isActiveModuleState($existingId)) {
                 continue;
             }
 
             [$color, $name, $template, $flags] = $stateData;
+
+            // A missing or invalid configuration may still have a surviving state.
+            $existingState = \Db::getInstance()->getRow(
+                'SELECT os.`id_order_state` FROM `' . _DB_PREFIX_ . 'order_state` os'
+                . ' INNER JOIN `' . _DB_PREFIX_ . 'order_state_lang` osl ON osl.`id_order_state` = os.`id_order_state`'
+                . " WHERE os.`module_name` = 'mercadopago' AND os.`deleted` = 0 AND osl.`name` = '" . pSQL($name) . "'"
+                . ' ORDER BY os.`id_order_state` ASC',
+                false
+            );
+            if (!empty($existingState['id_order_state'])) {
+                if (!\Configuration::updateValue($configKey, (int) $existingState['id_order_state'])) {
+                    return false;
+                }
+                continue;
+            }
 
             $state = new \OrderState();
             $state->module_name = 'mercadopago';
@@ -160,7 +311,9 @@ class InstallationService
                 return false;
             }
 
-            \Configuration::updateValue($configKey, $state->id);
+            if (!\Configuration::updateValue($configKey, $state->id)) {
+                return false;
+            }
         }
 
         $this->copyMailTemplates($module);
@@ -205,7 +358,7 @@ class InstallationService
             $id = (int) \Configuration::get('MERCADOPAGO_STATUS_' . $i);
             if ($id > 0) {
                 $state = new \OrderState($id);
-                if ($state->id) {
+                if ($state->id && $state->module_name === 'mercadopago' && !$state->deleted) {
                     $state->delete();
                 }
             }
@@ -213,13 +366,14 @@ class InstallationService
         }
     }
 
-    private function orderStateExists(int $id): bool
+    private function isActiveModuleState(int $id): bool
     {
         if ($id <= 0) {
             return false;
         }
         $result = \Db::getInstance()->getRow(
-            'SELECT COUNT(*) as cnt FROM `' . _DB_PREFIX_ . 'order_state` WHERE `id_order_state` = ' . (int) $id,
+            'SELECT COUNT(*) as cnt FROM `' . _DB_PREFIX_ . 'order_state` WHERE `id_order_state` = ' . (int) $id
+            . " AND `module_name` = 'mercadopago' AND `deleted` = 0",
             false
         );
 
