@@ -1,6 +1,6 @@
 {
   "name": "mercadopago/prestashop-v2",
-  "description": "MercadoPago payment module for PrestaShop - Version 5.0.4",
+  "description": "MercadoPago payment module for PrestaShop - Version 5.0.5",
   "license": "OSL-3.0",
   "type": "prestashop-module",
   "keywords": [
@@ -34,7 +34,7 @@
     "ext-openssl": "*",
     "doctrine/dbal": "^3.6",
     "doctrine/migrations": "^3.6",
-    "symfony/http-client": "^6.0",
+    "symfony/http-client": "^6.4.50",
     "mp-plugins/php-sdk": "2.13.0"
   },
   "require-dev": {

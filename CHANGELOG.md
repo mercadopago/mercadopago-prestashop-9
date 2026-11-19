@@ -1,5 +1,6 @@
 # Changelog
 
+
 All notable changes to the Mercado Pago module for PrestaShop are documented in
 this file.
 
@@ -7,6 +8,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [5.0.5] - 2026-11-16
+
+### Fixed
+- Preserve order states, payment tables, history and configuration on uninstall. Reinstallation validates configured states and reuses active Mercado Pago states before creating replacements. Explicit state cleanup never deletes another module's states. (PPSP-2164)
+- Repair missing transaction tables and additive payment fields during installation and upgrade, preserving existing records and reporting schema or migration failures.
+
+### Security
+- Require Symfony HttpClient 6.4.50 and update the bundled dependency from 6.4.42 to fix CVE-2026-121971 and CVE-2026-123119.
 
 ## [5.0.4] - 2026-10-28
 
