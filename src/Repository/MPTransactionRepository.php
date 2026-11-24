@@ -33,7 +33,7 @@ class MPTransactionRepository
     private const TABLE_TRANSACTIONS = 'mp_transactions';
     private const TABLE_MODULE = 'mp_module';
     private const ORDER_CREATION_RESERVATION_PREFIX = 'pending:';
-    private const WEBHOOK_ORDER_CREATION_RESERVATION_PREFIX = 'webhook-pending:';
+    public const WEBHOOK_ORDER_CREATION_RESERVATION_PREFIX = 'webhook-pending:';
     public const ORDER_CREATION_INVALID_PREFIX = 'invalid-cart:';
     public const ORDER_CREATION_UNCERTAIN_PREFIX = 'uncertain-order:';
     private const INTEGER_FIELDS = ['cart_id', 'customer_id', 'mp_module_id', 'is_payment_test', 'received_webhook'];
@@ -42,6 +42,10 @@ class MPTransactionRepository
     private $cartOrderTransactionDb;
 
     private bool $cartOrderTransactionActive = false;
+
+    private bool $orderReferenceCapacityLoaded = false;
+
+    private ?int $orderReferenceCapacity = null;
 
     /**
      * Start a repeatable-read transaction and lock the mutable cart rows used
@@ -473,7 +477,7 @@ class MPTransactionRepository
         $db = \Db::getInstance();
         $executed = $db->execute(
             'UPDATE `' . _DB_PREFIX_ . self::TABLE_TRANSACTIONS . '`'
-            . ' SET `merchant_order_id` = \'' . pSQL($webhookReservation) . '\''
+            . ' SET `merchant_order_id` = \'' . pSQL($webhookReservation) . '\', `guard_updated_at` = NOW()'
             . ' WHERE `id_mp_transaction` = ' . $transactionId
             . ' AND `cart_id` = ' . $cartId
             . ' AND `merchant_order_id` = \'' . pSQL($uncertainMarker) . '\'',
@@ -502,7 +506,7 @@ class MPTransactionRepository
         $db = \Db::getInstance();
         $executed = $db->execute(
             'UPDATE `' . _DB_PREFIX_ . self::TABLE_TRANSACTIONS . '`'
-            . ' SET `merchant_order_id` = \'' . pSQL($reservation) . '\''
+            . ' SET `merchant_order_id` = \'' . pSQL($reservation) . '\', `guard_updated_at` = NOW()'
             . ' WHERE `id_mp_transaction` = ' . $transactionId
             . ' AND `cart_id` = ' . $cartId
             . ' AND (`merchant_order_id` IS NULL OR `merchant_order_id` = \'\' OR `merchant_order_id` = \'0\''
@@ -594,7 +598,7 @@ class MPTransactionRepository
         $db = \Db::getInstance();
         $executed = $db->execute(
             'UPDATE `' . _DB_PREFIX_ . self::TABLE_TRANSACTIONS . '`'
-            . ' SET `merchant_order_id` = \'' . pSQL($uncertainMarker) . '\''
+            . ' SET `merchant_order_id` = \'' . pSQL($uncertainMarker) . '\', `guard_updated_at` = NOW()'
             . ' WHERE `id_mp_transaction` = ' . $transactionId
             . ' AND `cart_id` = ' . $cartId
             . ' AND (`merchant_order_id` IS NULL OR `merchant_order_id` = \'\' OR `merchant_order_id` = \'0\''
@@ -758,6 +762,41 @@ class MPTransactionRepository
         }
 
         return (int) ($row['id_mp_transaction'] ?? 0) === $transactionId;
+    }
+
+    /**
+     * Smallest declared length of the core columns that store an order reference
+     * (orders.reference and order_payment.order_reference), or null when it cannot be read.
+     *
+     * PrestaShop 9 declares both as VARCHAR(255); shops migrated without the 9.0.0
+     * upgrade script can keep VARCHAR(9). PrestaShop's connection runs with an empty
+     * sql_mode, so a longer reference is truncated silently instead of failing.
+     */
+    public function orderReferenceCapacity(): ?int
+    {
+        if ($this->orderReferenceCapacityLoaded) {
+            return $this->orderReferenceCapacity;
+        }
+        $this->orderReferenceCapacityLoaded = true;
+
+        $rows = \Db::getInstance()->executeS(
+            'SELECT `CHARACTER_MAXIMUM_LENGTH` AS `capacity` FROM `information_schema`.`COLUMNS`'
+            . ' WHERE `TABLE_SCHEMA` = DATABASE()'
+            . ' AND ((`TABLE_NAME` = \'' . pSQL(_DB_PREFIX_ . 'orders') . '\' AND `COLUMN_NAME` = \'reference\')'
+            . ' OR (`TABLE_NAME` = \'' . pSQL(_DB_PREFIX_ . 'order_payment') . '\' AND `COLUMN_NAME` = \'order_reference\'))',
+            true,
+            false
+        );
+        if (!is_array($rows)) {
+            return $this->orderReferenceCapacity = null;
+        }
+
+        $capacities = array_filter(
+            array_map(static fn (mixed $row): int => is_array($row) ? (int) ($row['capacity'] ?? 0) : 0, $rows),
+            static fn (int $capacity): bool => $capacity > 0
+        );
+
+        return $this->orderReferenceCapacity = $capacities === [] ? null : min($capacities);
     }
 
     public function update(array $data, $id)

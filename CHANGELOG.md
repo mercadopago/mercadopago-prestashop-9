@@ -9,6 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.0.6] - 2026-11-19
+
+### Added
+- Repository release skill for the PrestaShop 9 module, adapted from the legacy workflow with scoped packaging, native upgrade evidence and Marketplace/publication gates. (PPCO-5889)
+
+### Fixed
+- Checkout Pro order creation now checks the configured approved order state and the module's active status before marking the attempt `uncertain_order`; these configuration errors return a retryable 503 and the cart recovers on the next notification after the fix. The Checkout Pro return banner shows the buyer only a generic message; the configuration detail is logged. The same precheck refuses order creation when `orders.reference` or `order_payment.order_reference` cannot hold the 27-character attempt reference: shops migrated to PrestaShop 9 without the 9.0.0 upgrade script keep `VARCHAR(9)`, and PrestaShop's empty `sql_mode` would truncate the reference silently after hooks and e-mails ran. Installation and the 5.0.6 upgrade now widen both columns to `VARCHAR(255)` with the PrestaShop 9.0.0 statement when they are narrower; if that is not possible (for example without `ALTER` privilege) the module configuration page shows a warning with the exact SQL for the narrow columns only (a column already wider than `VARCHAR(255)` is never shrunk) until both widths are read and confirmed; a failed width lookup keeps the warning. Installation never fails because of these core columns. Any order-creation failure is logged with its cause after the cart transaction rolls back (PrestaShop's own `validateOrder()` log is discarded with it), including the stored versus expected order-reference length when the final link check fails. Database error details, e-mail addresses and payment activity identifiers (cart, transaction, payment, merchant order and order ids) are withheld from these logs. (PPSP-2465)
+- Checkout Pro and Wallet Button no longer send a buyer whose payment was approved back to the payment step when the order is not created yet. The return now opens a "payment received" page in the theme layout (or the native order confirmation once the notification creates the order), and a new preference for the same cart is refused while an approved payment awaits its order (48-hour window counted from the latest webhook reservation or uncertain marker), preventing a second charge. (PPSP-2465)
+
 ## [5.0.5] - 2026-11-16
 
 ### Fixed

@@ -1,6 +1,6 @@
 {
   "name": "mercadopago/prestashop-v2",
-  "description": "MercadoPago payment module for PrestaShop - Version 5.0.5",
+  "description": "MercadoPago payment module for PrestaShop - Version 5.0.6",
   "license": "OSL-3.0",
   "type": "prestashop-module",
   "keywords": [

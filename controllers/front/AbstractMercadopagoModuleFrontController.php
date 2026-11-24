@@ -21,12 +21,116 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
+use MercadoPago\Repository\PreferenceGuardRepository;
 use MercadoPago\Service\Order\AbstractOrderService;
 use MercadoPago\Service\Order\Exception\FinancialCartMismatchException;
 use MercadoPago\Service\Order\OrderAttemptReference;
 
 abstract class AbstractMercadopagoModuleFrontController extends ModuleFrontController
 {
+    /** Window in which an approved Checkout Pro payment without order blocks a new payment for the cart. */
+    protected const PAYMENT_RECEIVED_WINDOW_HOURS = 48;
+
+    protected const CHECKOUT_FAILURE_URL = 'index.php?controller=order&step=3&typeReturn=failure';
+
+    /**
+     * Approved Checkout Pro attempt of a cart that still has no order, or null.
+     * A failure to read keeps the previous behaviour (no block, no received page).
+     */
+    protected function approvedPaymentAwaitingOrder(int $cartId): ?array
+    {
+        if ($cartId <= 0 || (int) Order::getIdByCartId($cartId) > 0) {
+            return null;
+        }
+        try {
+            return $this->createPreferenceGuardRepository()->findApprovedAwaitingOrder(
+                $cartId,
+                self::PAYMENT_RECEIVED_WINDOW_HOURS
+            );
+        } catch (Throwable $e) {
+            // No cart or payment identifiers in the log (PPSP-1604).
+            PrestaShopLogger::addLog(
+                '[MercadoPago] Could not read approved payments awaiting order (' . get_class($e) . ')',
+                2,
+                null,
+                'MPNotification',
+                0,
+                true
+            );
+
+            return null;
+        }
+    }
+
+    protected function createPreferenceGuardRepository(): PreferenceGuardRepository
+    {
+        return new PreferenceGuardRepository();
+    }
+
+    /** Module URL that renders the "payment received" page for the cart. */
+    protected function paymentReceivedUrl(string $controller, int $cartId): string
+    {
+        return __PS_BASE_URI__ . 'index.php?fc=module&module=mercadopago&controller=' . rawurlencode($controller)
+            . '&typeReturn=received&cart_id=' . $cartId;
+    }
+
+    /**
+     * Render the "payment received" page, reusing the theme's page layout.
+     * Only the cart owner sees it; once the notification creates the order the
+     * buyer is sent to the native order confirmation instead.
+     */
+    protected function renderPaymentReceived(string $checkoutType): void
+    {
+        $cartId = (int) Tools::getValue('cart_id');
+        $cart = $cartId > 0 ? new Cart($cartId) : null;
+        if (!$cart || !$cart->id || (int) $cart->id_customer !== (int) $this->context->customer->id) {
+            Tools::redirect(self::CHECKOUT_FAILURE_URL);
+
+            return;
+        }
+
+        $orderId = (int) Order::getIdByCartId($cartId);
+        if ($orderId > 0) {
+            $order = new Order($orderId);
+            Tools::redirect(
+                __PS_BASE_URI__ . 'index.php?controller=order-confirmation'
+                . '&id_cart=' . $cartId
+                . '&key=' . rawurlencode((string) $order->secure_key)
+                . '&id_order=' . $orderId
+                . '&id_module=' . (int) $this->module->id
+                . '&checkout_type=' . rawurlencode($checkoutType)
+            );
+
+            return;
+        }
+
+        $attempt = $this->approvedPaymentAwaitingOrder($cartId);
+        if ($attempt === null) {
+            Tools::redirect(self::CHECKOUT_FAILURE_URL);
+
+            return;
+        }
+
+        $currency = new Currency((int) $cart->id_currency);
+        $amount = (float) ($attempt['total'] ?? 0);
+        $formattedAmount = $amount > 0 && isset($this->context->currentLocale)
+            ? $this->context->currentLocale->formatPrice($amount, (string) $currency->iso_code)
+            : '';
+
+        parent::initContent();
+        // Plain values only: the template escapes each one (no pre-rendered HTML).
+        $this->context->smarty->assign(['mp_received' => [
+            'title' => $this->module->l('We received your payment'),
+            'message' => $this->module->l('Your order is being processed. You will receive the confirmation by e-mail, so there is no need to pay again.'),
+            'help' => $this->module->l('If you do not receive the confirmation, please contact the store.'),
+            'amount_label' => $this->module->l('Amount'),
+            'amount' => $formattedAmount,
+            'back_label' => $this->module->l('Back to store'),
+            'back_url' => __PS_BASE_URI__,
+        ]]);
+        $this->setTemplate('module:mercadopago/views/templates/front/payment-received.tpl');
+    }
+
     /**
      * Persist the MP transaction and create the PrestaShop order while holding the same
      * cart-scoped lock used by webhook processing.

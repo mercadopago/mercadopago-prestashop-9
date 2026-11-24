@@ -35,6 +35,8 @@ if (!defined('_PS_VERSION_')) {
 /** Canonical Checkout Pro correlation and one guarded materialization path. */
 class PreferenceGuardService
 {
+    private const ORDER_CREATION_UNAVAILABLE = 'Order creation is temporarily unavailable';
+
     private array $merchantResults = [];
 
     public function __construct(
@@ -282,6 +284,19 @@ class PreferenceGuardService
                 if (!$module || !method_exists($module, 'validateOrder')) {
                     throw new NotificationRetryableException('Mercado Pago module is unavailable for order creation');
                 }
+                // validateOrder() rejects an unloadable order state or an inactive module before
+                // any hook, order or e-mail exists, and a narrow reference column would only fail
+                // after them. Check all three first so a configuration error stays a retryable
+                // 503 instead of a permanent uncertain_order block.
+                $orderStateId = (int) $this->preferences->withCartContext(
+                    $cart,
+                    fn (): int => $this->approvedOrderStateId()
+                );
+                $this->assertOrderCreationPrerequisites(
+                    $module,
+                    $orderStateId,
+                    OrderAttemptReference::length()
+                );
                 // A database rollback cannot retract hooks or emails emitted by validateOrder.
                 // Persist the fail-closed marker before invoking code with external side effects.
                 $this->transactions->commitCartOrderTransaction();
@@ -325,12 +340,11 @@ class PreferenceGuardService
                     $this->transactions->commitCartOrderTransaction();
                     throw new NotificationSkippedException('Approved payment requires manual reconciliation', 'preference_guard');
                 }
-                $this->preferences->withCartContext($cart, function () use ($module, $cartId, $transaction, $customer, $cart, $transactionId, &$validateOrderStarted): void {
-                    $state = (int) \Configuration::get('MERCADOPAGO_STATUS_1');
+                $this->preferences->withCartContext($cart, function () use ($module, $cartId, $transaction, $customer, $cart, $transactionId, $orderStateId, &$validateOrderStarted): void {
                     $validateOrderStarted = true;
                     $module->validateOrder(
                         $cartId,
-                        $state > 0 ? $state : (int) \Configuration::get('PS_OS_PAYMENT'),
+                        $orderStateId,
                         (float) $transaction['snapshot_total'],
                         $module->displayName,
                         null,
@@ -344,10 +358,16 @@ class PreferenceGuardService
                 });
                 $orderId = $this->currentOrderId($cartId);
                 $order = new \Order($orderId);
-                if ($orderId <= 0 || !OrderAttemptReference::matches($order, $transactionId, $cartId)
-                    || $this->transactions->linkMerchantOrderId($transactionId, $cartId, $orderId) !== true
-                ) {
-                    throw new \RuntimeException('Could not link exact preference order');
+                if ($orderId <= 0) {
+                    throw new OrderCreationDiagnosticException('Could not link exact preference order: validateOrder() returned without an order for the cart');
+                }
+                if (!OrderAttemptReference::matches($order, $transactionId, $cartId)) {
+                    // The opaque reference is not sensitive, but its length tells a truncating
+                    // ps_orders.reference column or a module that rewrites references apart.
+                    throw new OrderCreationDiagnosticException('Could not link exact preference order: the order reference does not match the attempt (stored length ' . strlen((string) $order->reference) . ', expected ' . strlen(OrderAttemptReference::fromAttempt($transactionId, $cartId)) . ')');
+                }
+                if ($this->transactions->linkMerchantOrderId($transactionId, $cartId, $orderId) !== true) {
+                    throw new OrderCreationDiagnosticException('Could not link exact preference order: the order link was not persisted');
                 }
                 if (!$this->storage->materializedMatches($transaction, $order)) {
                     $this->transactions->rollbackCartOrderTransaction();
@@ -362,6 +382,13 @@ class PreferenceGuardService
                 return $this->storage->find($preferenceId) ?? throw new \RuntimeException('Linked preference disappeared');
             } catch (\Throwable $cause) {
                 $this->transactions->rollbackCartOrderTransaction();
+                // Log only after the rollback: anything written inside the cart transaction,
+                // including PrestaShop's own validateOrder() log, is discarded with it.
+                if (!$cause instanceof NotificationSkippedException
+                    && !$cause instanceof PendingCheckoutRetryException
+                ) {
+                    $this->logOrderCreationFailure($cartId, $transactionId, $validateOrderStarted, $cause);
+                }
                 if ($uncertainMarkerPersisted && !$validateOrderStarted
                     && $this->transactions->restoreWebhookOrderCreationReservation($transactionId, $cartId) !== true
                 ) {
@@ -376,6 +403,79 @@ class PreferenceGuardService
         } finally {
             $this->transactions->releaseNotificationLock($cartId);
         }
+    }
+
+    /** Same resolution validateOrder() receives: the module state, or PS_OS_PAYMENT when unset. */
+    private function approvedOrderStateId(): int
+    {
+        $state = (int) \Configuration::get('MERCADOPAGO_STATUS_1');
+
+        return $state > 0 ? $state : (int) \Configuration::get('PS_OS_PAYMENT');
+    }
+
+    /**
+     * Mirror the checks PaymentModule::validateOrder() performs before any side effect,
+     * plus the core columns' capacity for the opaque attempt reference: a legacy
+     * VARCHAR(9) silently truncates it, and only after hooks and e-mails ran.
+     * The top-level message reaches the buyer through the Checkout Pro return banner,
+     * so it stays generic; the configuration detail travels as the logged previous cause.
+     */
+    private function assertOrderCreationPrerequisites(object $module, int $orderStateId, int $referenceLength): void
+    {
+        $state = $orderStateId > 0 ? new \OrderState($orderStateId) : null;
+        if ($state === null || (int) $state->id !== $orderStateId) {
+            throw new NotificationRetryableException(self::ORDER_CREATION_UNAVAILABLE, 0, new OrderCreationDiagnosticException('Approved Checkout Pro order state ' . $orderStateId . ' cannot be loaded; review MERCADOPAGO_STATUS_1'));
+        }
+        if (property_exists($module, 'active') && !$module->active) {
+            throw new NotificationRetryableException(self::ORDER_CREATION_UNAVAILABLE, 0, new OrderCreationDiagnosticException('Mercado Pago module is not active for order creation'));
+        }
+        // Unknown capacity keeps the previous behavior; only a proven narrow column blocks.
+        $capacity = $this->transactions->orderReferenceCapacity();
+        if ($capacity !== null && $capacity < $referenceLength) {
+            throw new NotificationRetryableException(self::ORDER_CREATION_UNAVAILABLE, 0, new OrderCreationDiagnosticException('Order reference columns hold ' . $capacity . ' characters but the Mercado Pago attempt reference needs ' . $referenceLength . '; widen orders.reference and order_payment.order_reference to VARCHAR(255) as PrestaShop 9 does'));
+        }
+    }
+
+    private function logOrderCreationFailure(
+        int $cartId,
+        int $transactionId,
+        bool $validateOrderStarted,
+        \Throwable $cause,
+    ): void {
+        $chain = [];
+        for ($error = $cause, $depth = 0; $error !== null && $depth < 3; $error = $error->getPrevious(), ++$depth) {
+            $chain[] = get_class($error) . ': ' . self::loggableExceptionMessage($error);
+        }
+        // Payment activity identifiers (cart, transaction, payment, order) never reach the log (PPSP-1604).
+        $message = '[MercadoPago] Preference order creation failed (validateOrder '
+            . ($validateOrderStarted ? 'started' : 'not started') . '): ' . implode(' | caused by ', $chain);
+
+        \PrestaShopLogger::addLog(mb_substr($message, 0, 1000), 3, null, 'MPNotification', 0, true);
+    }
+
+    /**
+     * Exception text may come from the core or third-party hooks. Database errors can
+     * carry the failed SQL (customer data), so only their class is kept; other messages
+     * are flattened to one line with e-mail addresses masked.
+     *
+     * PrestaShopLogger stores the message through pSQL(), whose strip_tags() drops
+     * everything from a "<" on, so neither the log format nor these messages may keep
+     * angle brackets (PPSP-2465). Text outside OrderCreationDiagnosticException can carry
+     * payment activity identifiers, so its digits are masked (PPSP-1604).
+     */
+    private static function loggableExceptionMessage(\Throwable $error): string
+    {
+        if ($error instanceof \PrestaShopDatabaseException || $error instanceof \PDOException) {
+            return '(database error details withheld)';
+        }
+        $message = (string) preg_replace('/[\x00-\x1F\x7F]+/u', ' ', $error->getMessage());
+        $message = (string) preg_replace('/[^\s@<>"\']+@[^\s@<>"\']+\.[A-Za-z]{2,}/u', '[email]', $message);
+        $message = str_replace(['<', '>'], ['[', ']'], $message);
+        if (!$error instanceof OrderCreationDiagnosticException) {
+            $message = (string) preg_replace('/\d+/', '#', $message);
+        }
+
+        return mb_substr(trim($message), 0, 300);
     }
 
     /** A prior terminal payment can be replaced only by exact proof from both views. */

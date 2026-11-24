@@ -118,6 +118,20 @@
     window.location.href = failureUrl || "index.php?controller=order&step=3&typeReturn=failure";
   }
 
+  // Follows a server-provided redirect only when it stays on this shop (no open redirect).
+  function redirectToSameOrigin(url) {
+    try {
+      var target = new URL(url, window.location.href);
+      if (target.origin !== window.location.origin) {
+        return false;
+      }
+      window.location.href = target.href;
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
   function openMercadoPagoModal(publicKey, preferenceId) {
     if (typeof MercadoPago === "undefined") {
       redirectToFailure();
@@ -165,6 +179,9 @@
         .then(function (data) {
           if (data.preference && data.preference.id) {
             openMercadoPagoModal(publicKey, data.preference.id);
+          } else if (data.redirect && redirectToSameOrigin(data.redirect)) {
+            // An approved payment for this cart is already waiting for its order.
+            return;
           } else {
             redirectToFailure();
           }

@@ -32,6 +32,7 @@ use Doctrine\Migrations\Exception\NoMigrationsToExecute;
 use Doctrine\Migrations\Metadata\MigrationPlanList;
 use Doctrine\Migrations\MigratorConfiguration;
 use MercadoPago\Service\Order\AbstractOrderService;
+use MercadoPago\Service\Order\OrderAttemptReference;
 
 /*
  * Installation Service
@@ -43,6 +44,14 @@ if (!defined('_PS_VERSION_')) {
 
 class InstallationService
 {
+    /** Configuration key listing core reference columns the module could not widen. */
+    public const ORDER_REFERENCE_WARNING_KEY = 'MERCADOPAGO_ORDER_REFERENCE_SCHEMA_WARNING';
+
+    /** PrestaShop 9 declares both columns as VARCHAR(255) (install schema and 9.0.0 upgrade script). */
+    private const ORDER_REFERENCE_COLUMNS = ['orders' => 'reference', 'order_payment' => 'order_reference'];
+
+    private const ORDER_REFERENCE_LENGTH = 255;
+
     /**
      * @var \mercadopago
      */
@@ -70,6 +79,9 @@ class InstallationService
      */
     public function createTables(): bool
     {
+        // Core schema alignment never blocks installation: a failure is surfaced to the merchant instead.
+        $this->ensureOrderReferenceColumns();
+
         try {
             $this->ensureCoreTables();
             $dependencyFactory = $this->getDependencyFactory();
@@ -192,6 +204,202 @@ class InstallationService
                     . $connection->quoteIdentifier($index) . ' (' . $connection->quoteIdentifier($column) . ')');
             }
         }
+    }
+
+    /**
+     * Widen orders.reference and order_payment.order_reference to the PrestaShop 9 width.
+     *
+     * Shops migrated to PrestaShop 9 without the 9.0.0 upgrade script can keep the 1.7/8
+     * VARCHAR(9). Since 5.0.2 every module-created order stores a 27-character attempt
+     * reference, and PrestaShop's empty sql_mode truncates it silently, so Checkout Pro
+     * orders end in uncertain_order (PPSP-2465). The statement is the core's own; it only
+     * runs on a column narrower than VARCHAR(255), so a wider column is never shrunk.
+     * Columns still too narrow afterwards are recorded for the back-office warning. The
+     * record is cleared only after both widths were read and found wide enough: an
+     * unreadable width keeps the previous record.
+     *
+     * @return string[] "table.column (length)" entries still unable to hold the reference
+     */
+    public function ensureOrderReferenceColumns(): array
+    {
+        try {
+            $required = OrderAttemptReference::length();
+            $narrow = [];
+            $confirmed = true;
+            foreach (self::ORDER_REFERENCE_COLUMNS as $table => $column) {
+                $length = $this->columnLength($table, $column);
+                if ($length === null) {
+                    $confirmed = false;
+                    continue;
+                }
+                if ($length >= self::ORDER_REFERENCE_LENGTH) {
+                    continue;
+                }
+                try {
+                    \Db::getInstance()->execute(
+                        'ALTER TABLE `' . bqSQL(_DB_PREFIX_ . $table) . '` CHANGE `' . bqSQL($column) . '` `'
+                        . bqSQL($column) . '` VARCHAR(' . self::ORDER_REFERENCE_LENGTH . ')',
+                        false
+                    );
+                } catch (\Throwable $e) {
+                    error_log('MercadoPago: could not widen ' . $table . '.' . $column . ' (' . get_class($e) . ')');
+                }
+                // Without a fresh read the known narrow width stands until a later read confirms the change.
+                $length = $this->columnLength($table, $column) ?? $length;
+                if ($length < $required) {
+                    $narrow[$table] = $length;
+                }
+            }
+
+            $this->recordOrderReferenceWarning($narrow, $confirmed);
+
+            return self::describeOrderReferenceColumns($narrow);
+        } catch (\Throwable $e) {
+            error_log('MercadoPago: order reference schema check failed (' . get_class($e) . ')');
+
+            return [];
+        }
+    }
+
+    /**
+     * Back-office warning for the recorded narrow columns, re-read without changing the schema.
+     *
+     * The record is cleared only when both widths are read and can hold the attempt reference.
+     * When a width cannot be read, the record is kept and its last known columns are reported.
+     *
+     * @return array{columns: string, sql: string}|null null when no warning is pending
+     */
+    public function pendingOrderReferenceWarning(): ?array
+    {
+        $recorded = self::decodeOrderReferenceWarning((string) \Configuration::get(self::ORDER_REFERENCE_WARNING_KEY));
+        if ($recorded === null) {
+            return null;
+        }
+
+        $current = $this->narrowOrderReferenceColumns();
+        if ($current !== null) {
+            $this->recordOrderReferenceWarning($current, true);
+            $recorded = $current;
+        }
+        if ($recorded === []) {
+            return null;
+        }
+
+        return [
+            'columns' => implode(', ', self::describeOrderReferenceColumns($recorded)),
+            'sql' => self::orderReferenceRepairSql($recorded),
+        ];
+    }
+
+    /**
+     * SQL the merchant's developer can run when the module could not widen the columns. Only
+     * the given narrow columns are included, so a column wider than VARCHAR(255) is never shrunk.
+     *
+     * @param array<string, int> $narrow table => current length
+     */
+    public static function orderReferenceRepairSql(array $narrow): string
+    {
+        $statements = [];
+        foreach (self::ORDER_REFERENCE_COLUMNS as $table => $column) {
+            if (!isset($narrow[$table]) || $narrow[$table] >= self::ORDER_REFERENCE_LENGTH) {
+                continue;
+            }
+            $statements[] = 'ALTER TABLE `' . _DB_PREFIX_ . $table . '` CHANGE `' . $column . '` `' . $column
+                . '` VARCHAR(' . self::ORDER_REFERENCE_LENGTH . ');';
+        }
+
+        return implode(' ', $statements);
+    }
+
+    /**
+     * Columns that cannot hold the attempt reference, read without changing the schema.
+     *
+     * @return array<string, int>|null table => length; null when a width cannot be read
+     */
+    private function narrowOrderReferenceColumns(): ?array
+    {
+        $required = OrderAttemptReference::length();
+        $narrow = [];
+        foreach (self::ORDER_REFERENCE_COLUMNS as $table => $column) {
+            $length = $this->columnLength($table, $column);
+            if ($length === null) {
+                return null;
+            }
+            if ($length < $required) {
+                $narrow[$table] = $length;
+            }
+        }
+
+        return $narrow;
+    }
+
+    /**
+     * @param array<string, int> $narrow
+     * @param bool $confirmed whether every width was read; only then can an empty list clear the record
+     */
+    private function recordOrderReferenceWarning(array $narrow, bool $confirmed): void
+    {
+        if ($narrow !== []) {
+            $entries = [];
+            foreach ($narrow as $table => $length) {
+                $entries[] = $table . ':' . $length;
+            }
+            \Configuration::updateValue(self::ORDER_REFERENCE_WARNING_KEY, implode(',', $entries));
+
+            return;
+        }
+        if ($confirmed) {
+            \Configuration::deleteByName(self::ORDER_REFERENCE_WARNING_KEY);
+        }
+    }
+
+    /** @return array<string, int>|null null without a record; [] when the record cannot be parsed */
+    private static function decodeOrderReferenceWarning(string $value): ?array
+    {
+        if ($value === '') {
+            return null;
+        }
+        $narrow = [];
+        foreach (explode(',', $value) as $entry) {
+            [$table, $length] = array_pad(explode(':', trim($entry), 2), 2, '');
+            if (isset(self::ORDER_REFERENCE_COLUMNS[$table]) && ctype_digit($length)) {
+                $narrow[$table] = (int) $length;
+            }
+        }
+
+        return $narrow;
+    }
+
+    /**
+     * @param array<string, int> $narrow
+     *
+     * @return string[]
+     */
+    private static function describeOrderReferenceColumns(array $narrow): array
+    {
+        $described = [];
+        foreach ($narrow as $table => $length) {
+            $described[] = $table . '.' . self::ORDER_REFERENCE_COLUMNS[$table] . ' (' . $length . ')';
+        }
+
+        return $described;
+    }
+
+    private function columnLength(string $table, string $column): ?int
+    {
+        try {
+            $length = \Db::getInstance()->getValue(
+                'SELECT `CHARACTER_MAXIMUM_LENGTH` FROM `information_schema`.`COLUMNS`'
+                . ' WHERE `TABLE_SCHEMA` = DATABASE()'
+                . ' AND `TABLE_NAME` = \'' . pSQL(_DB_PREFIX_ . $table) . '\''
+                . ' AND `COLUMN_NAME` = \'' . pSQL($column) . '\'',
+                false
+            );
+        } catch (\Throwable $e) {
+            return null;
+        }
+
+        return is_numeric($length) && (int) $length > 0 ? (int) $length : null;
     }
 
     /** Fail closed when an existing table cannot support the module's writes. */

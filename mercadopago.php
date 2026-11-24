@@ -24,7 +24,7 @@ use MercadoPago\Service\Checkout\Methods\PseCheckoutService;
 use MercadoPago\Service\Checkout\Methods\TicketCheckoutService;
 use MercadoPago\Service\Checkout\Methods\YapeCheckoutService;
 
-define('MP_VERSION', '5.0.5');
+define('MP_VERSION', '5.0.6');
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -55,7 +55,7 @@ class mercadopago extends PaymentModule
         $this->name = 'mercadopago';
         $this->tab = 'payments_gateways';
         // Always update, because prestashop doesn't accept version coming from another variable (MP_VERSION)
-        $this->version = '5.0.5';
+        $this->version = '5.0.6';
         $this->author = 'MercadoPago';
         $this->need_instance = 1;
         $this->bootstrap = true;
@@ -108,10 +108,36 @@ class mercadopago extends PaymentModule
         }
 
         $this->registerAdminAssets();
+        $this->addOrderReferenceSchemaWarning();
 
         $configurationService = new MercadoPago\Service\Configuration\ConfigurationService($this);
 
         return $configurationService->render();
+    }
+
+    /**
+     * Back-office warning while the core order-reference columns cannot hold the attempt
+     * reference and install/upgrade could not widen them (PPSP-2465). Cleared once both
+     * widths are read and fixed; an unreadable width keeps the last recorded warning.
+     */
+    private function addOrderReferenceSchemaWarning(): void
+    {
+        if (!Configuration::get(MercadoPago\Service\Installation\InstallationService::ORDER_REFERENCE_WARNING_KEY)) {
+            return;
+        }
+
+        $warning = (new MercadoPago\Service\Installation\InstallationService($this))->pendingOrderReferenceWarning();
+        if ($warning === null) {
+            return;
+        }
+
+        if (isset($this->context->controller) && property_exists($this->context->controller, 'warnings')) {
+            $this->context->controller->warnings[] = sprintf(
+                $this->l('Mercado Pago could not widen these order reference columns to VARCHAR(255): %s. Checkout Pro orders may stay pending manual reconciliation until they are widened. Ask your developer to run: %s'),
+                $warning['columns'],
+                $warning['sql']
+            );
+        }
     }
 
     private function ajaxProcessGetCredentials(): void

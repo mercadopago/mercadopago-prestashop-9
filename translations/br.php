@@ -387,3 +387,11 @@ $_MODULE['<{mercadopago}prestashop>mercadopago_cfd81b19e7fd0284975947cfda763400'
 $_MODULE['<{mercadopago}prestashop>mercadopago_a03c7d4801ebba5fc9c8ba39d6a7cf1b'] = 'Para mais informações, consulte os';
 $_MODULE['<{mercadopago}prestashop>mercadopago_6f1cdf85d585bbbfdd61718264cd17e3'] = 'detalhes do processo de vinculação';
 $_MODULE['<{mercadopago}prestashop>mercadopago_d7de55977ef62115a8c4a291ba8f2dd4'] = 'O desconto deve ser um número inteiro e menor que 100%.';
+
+// Admin: order reference column width (PPSP-2465)
+$_MODULE['<{mercadopago}prestashop>mercadopago_280a0c42b0171e98637a4a4a4fffe30f'] = 'O Mercado Pago não conseguiu ampliar estas colunas de referência do pedido para VARCHAR(255): %s. Pedidos do Checkout Pro podem ficar pendentes de conciliação manual até que sejam ampliadas. Peça ao seu desenvolvedor para executar: %s';
+// Checkout Pro: approved payment awaiting order (PPSP-2465)
+$_MODULE['<{mercadopago}prestashop>mercadopago_82d4117cfde659b1aa71c4e5c4530e7c'] = 'Recebemos seu pagamento';
+$_MODULE['<{mercadopago}prestashop>mercadopago_bdb7b9345fddbd10fdecffb601f6bb6c'] = 'Seu pedido está sendo processado. Você receberá a confirmação por e-mail, então não é necessário pagar novamente.';
+$_MODULE['<{mercadopago}prestashop>mercadopago_f5f66beed39b164b2a7d843b05d10694'] = 'Se você não receber a confirmação, entre em contato com a loja.';
+$_MODULE['<{mercadopago}prestashop>mercadopago_c4f0a9cb543b16b46c7aba50ad94caf3'] = 'Voltar para a loja';
