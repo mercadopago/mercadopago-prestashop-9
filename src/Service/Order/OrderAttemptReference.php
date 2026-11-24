@@ -29,6 +29,12 @@ final class OrderAttemptReference
     private const PREFIX = 'MP-';
     private const HASH_LENGTH = 24;
 
+    /** Length of every attempt reference; the core order-reference columns must hold it. */
+    public static function length(): int
+    {
+        return strlen(self::PREFIX) + self::HASH_LENGTH;
+    }
+
     public static function fromAttempt(int $transactionId, int $cartId): string
     {
         if ($transactionId <= 0 || $cartId <= 0) {

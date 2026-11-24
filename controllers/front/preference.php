@@ -61,6 +61,13 @@ class MercadopagoPreferenceModuleFrontController extends AbstractMercadopagoModu
                 return;
             }
 
+            // An approved payment of this cart is still waiting for its order: never start a second one.
+            if ($this->approvedPaymentAwaitingOrder((int) $cart->id) !== null) {
+                $this->redirectToPaymentReceived((int) $cart->id);
+
+                return;
+            }
+
             $apiResult = $preferenceService->createPreference($cart);
 
             $httpStatus = $apiResult['status'] ?? 0;
@@ -128,6 +135,12 @@ class MercadopagoPreferenceModuleFrontController extends AbstractMercadopagoModu
      */
     private function handleReturn(string $typeReturn)
     {
+        if ($typeReturn === 'received') {
+            $this->renderPaymentReceived('preference');
+
+            return;
+        }
+
         if ($typeReturn === 'failure') {
             Tools::redirect('index.php?controller=order&step=3&typeReturn=failure');
 
@@ -178,9 +191,29 @@ class MercadopagoPreferenceModuleFrontController extends AbstractMercadopagoModu
                 '[MercadoPago Standard] Return handling error: ' . $e->getMessage(),
                 3
             );
+            // The payment was approved but the order is not there yet (or needs reconciliation):
+            // tell the buyer it was received instead of inviting a second payment.
+            if ($this->approvedPaymentAwaitingOrder($cartId) !== null) {
+                Tools::redirect($this->paymentReceivedUrl('preference', $cartId));
+
+                return;
+            }
             $this->context->cookie->__set('redirect_message', $e->getMessage());
             Tools::redirect('index.php?controller=order&step=3&typeReturn=failure');
         }
+    }
+
+    /** Modal checkout calls this endpoint with fetch(), so it needs JSON instead of a redirect. */
+    private function redirectToPaymentReceived(int $cartId): void
+    {
+        $url = $this->paymentReceivedUrl('preference', $cartId);
+        if ((bool) Configuration::get('MERCADOPAGO_STANDARD_MODAL')) {
+            header('Content-Type: application/json');
+            echo json_encode(['code' => 409, 'redirect' => $url]);
+            exit;
+        }
+
+        Tools::redirect($url);
     }
 
     protected function createPreferenceReturnService(): MercadoPago\Service\Preference\PreferenceReturnService

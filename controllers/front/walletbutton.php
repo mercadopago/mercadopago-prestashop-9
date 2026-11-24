@@ -66,6 +66,13 @@ class MercadopagoWalletbuttonModuleFrontController extends AbstractMercadopagoMo
                 return;
             }
 
+            // An approved payment of this cart is still waiting for its order: never start a second one.
+            if ($this->approvedPaymentAwaitingOrder((int) $cart->id) !== null) {
+                $this->returnJson(['redirect' => $this->paymentReceivedUrl('walletbutton', (int) $cart->id)], 409);
+
+                return;
+            }
+
             $apiResult = $walletService->createWalletPreference($cart);
 
             $httpStatus = $apiResult['status'] ?? 0;
@@ -101,6 +108,12 @@ class MercadopagoWalletbuttonModuleFrontController extends AbstractMercadopagoMo
      */
     private function handleReturn(string $typeReturn): void
     {
+        if ($typeReturn === 'received') {
+            $this->renderPaymentReceived('wallet_button');
+
+            return;
+        }
+
         if ($typeReturn === 'failure') {
             Tools::redirect('index.php?controller=order&step=3&typeReturn=failure');
 
@@ -148,6 +161,13 @@ class MercadopagoWalletbuttonModuleFrontController extends AbstractMercadopagoMo
             Tools::redirect($uri);
         } catch (Exception $e) {
             PrestaShopLogger::addLog('[MercadoPago WalletButton] Exception: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine(), 3);
+            // The payment was approved but the order is not there yet (or needs reconciliation):
+            // tell the buyer it was received instead of inviting a second payment.
+            if ($this->approvedPaymentAwaitingOrder($cartId) !== null) {
+                Tools::redirect($this->paymentReceivedUrl('walletbutton', $cartId));
+
+                return;
+            }
             $this->context->cookie->__set('redirect_message', 'An unexpected error occurred. Please try again.');
             Tools::redirect('index.php?controller=order&step=3&typeReturn=failure');
         }

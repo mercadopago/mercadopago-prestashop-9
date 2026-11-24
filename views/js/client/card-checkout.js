@@ -55,6 +55,20 @@
     }
   };
 
+  // Follows a server-provided redirect only when it stays on this shop (no open redirect).
+  function redirectToSameOrigin(url) {
+    try {
+      var target = new URL(url, window.location.href);
+      if (target.origin !== window.location.origin) {
+        return false;
+      }
+      window.location.href = target.href;
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
   function setupWalletButton(walletButtonUrl) {
     var button = document.getElementById('mp-wallet-button');
     if (!button) {
@@ -71,6 +85,10 @@
         .then(function (data) {
           if (!data.preference || !data.preference.id) {
             button.disabled = false;
+            // An approved payment for this cart is already waiting for its order.
+            if (data.redirect && redirectToSameOrigin(data.redirect)) {
+              return;
+            }
             window.location.href = 'index.php?controller=order&step=3&typeReturn=failure';
             return;
           }

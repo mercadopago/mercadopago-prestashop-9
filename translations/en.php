@@ -603,3 +603,11 @@ $_MODULE['<{mercadopago}prestashop>mercadopago_3fc89b3d4541d895b960326db9a27cea'
 $_MODULE['<{mercadopago}prestashop>mercadopago_2b4605dd693660b54a3a09f93ca80cad'] = 'Your customers will access the Mercado Pago payment form without leaving your store.';
 $_MODULE['<{mercadopago}prestashop>mercadopago_e158df26c6c5fa5329868a48ab2e54ee'] = 'hours without activity';
 $_MODULE['<{mercadopago}prestashop>mercadopago_b172c79e364145e041d28c7b267e3f9f'] = 'Customize the payment experience of your customers in your online store.';
+
+// Admin: order reference column width (PPSP-2465)
+$_MODULE['<{mercadopago}prestashop>mercadopago_280a0c42b0171e98637a4a4a4fffe30f'] = 'Mercado Pago could not widen these order reference columns to VARCHAR(255): %s. Checkout Pro orders may stay pending manual reconciliation until they are widened. Ask your developer to run: %s';
+// Checkout Pro: approved payment awaiting order (PPSP-2465)
+$_MODULE['<{mercadopago}prestashop>mercadopago_82d4117cfde659b1aa71c4e5c4530e7c'] = 'We received your payment';
+$_MODULE['<{mercadopago}prestashop>mercadopago_bdb7b9345fddbd10fdecffb601f6bb6c'] = 'Your order is being processed. You will receive the confirmation by e-mail, so there is no need to pay again.';
+$_MODULE['<{mercadopago}prestashop>mercadopago_f5f66beed39b164b2a7d843b05d10694'] = 'If you do not receive the confirmation, please contact the store.';
+$_MODULE['<{mercadopago}prestashop>mercadopago_c4f0a9cb543b16b46c7aba50ad94caf3'] = 'Back to store';

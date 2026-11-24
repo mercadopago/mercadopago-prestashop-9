@@ -609,3 +609,11 @@ $_MODULE['<{mercadopago}prestashop>mercadopago_3fc89b3d4541d895b960326db9a27cea'
 $_MODULE['<{mercadopago}prestashop>mercadopago_2b4605dd693660b54a3a09f93ca80cad'] = 'Tus clientes accederán al formulario de pago de Mercado Pago sin salir de tu tienda.';
 $_MODULE['<{mercadopago}prestashop>mercadopago_e158df26c6c5fa5329868a48ab2e54ee'] = 'horas sin actividad';
 $_MODULE['<{mercadopago}prestashop>mercadopago_b172c79e364145e041d28c7b267e3f9f'] = 'Personaliza la experiencia de pago de tus clientes en tu tienda online.';
+
+// Admin: order reference column width (PPSP-2465)
+$_MODULE['<{mercadopago}prestashop>mercadopago_280a0c42b0171e98637a4a4a4fffe30f'] = 'Mercado Pago no pudo ampliar estas columnas de referencia de pedido a VARCHAR(255): %s. Los pedidos de Checkout Pro pueden quedar pendientes de conciliación manual hasta que se amplíen. Pide a tu desarrollador que ejecute: %s';
+// Checkout Pro: approved payment awaiting order (PPSP-2465)
+$_MODULE['<{mercadopago}prestashop>mercadopago_82d4117cfde659b1aa71c4e5c4530e7c'] = 'Recibimos tu pago';
+$_MODULE['<{mercadopago}prestashop>mercadopago_bdb7b9345fddbd10fdecffb601f6bb6c'] = 'Tu pedido se está procesando. Recibirás la confirmación por correo electrónico, así que no es necesario pagar de nuevo.';
+$_MODULE['<{mercadopago}prestashop>mercadopago_f5f66beed39b164b2a7d843b05d10694'] = 'Si no recibes la confirmación, comunícate con la tienda.';
+$_MODULE['<{mercadopago}prestashop>mercadopago_c4f0a9cb543b16b46c7aba50ad94caf3'] = 'Volver a la tienda';

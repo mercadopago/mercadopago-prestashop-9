@@ -83,6 +83,39 @@ class PreferenceGuardRepository
         return $row;
     }
 
+    /**
+     * Latest Checkout Pro attempt of the cart whose approved payment is still waiting for an order:
+     * a webhook reservation, the uncertain marker, or a guard block recorded for an approved payment.
+     * The guard only reaches those states after confirming the payment as approved through the API.
+     * Attempts idle for longer than $maxAgeHours are ignored so a later refund cannot lock the cart. The age counts
+     * from guard_updated_at, which the webhook reservation and the uncertain marker renew, so an old preference paid
+     * now is still recognised.
+     */
+    public function findApprovedAwaitingOrder(int $cartId, int $maxAgeHours): ?array
+    {
+        if ($cartId <= 0 || $maxAgeHours <= 0) {
+            return null;
+        }
+        $rows = $this->query(
+            'SELECT `id_mp_transaction`, `cart_id`, `order_id`, `total`, `merchant_order_id`, `guard_status`,'
+            . ' `guard_reason`, `guard_payment_id`'
+            . ' FROM `' . _DB_PREFIX_ . 'mp_transactions`'
+            . ' WHERE `cart_id` = ? AND `guard_preference_id` IS NOT NULL'
+            . ' AND (`merchant_order_id` LIKE ? OR `merchant_order_id` LIKE ?'
+            . ' OR (`guard_status` = \'blocked\' AND `guard_payment_id` IS NOT NULL AND `guard_payment_id` <> \'\'))'
+            . ' AND COALESCE(`guard_updated_at`, `updated_at`, `created_at`) >= (NOW() - INTERVAL ? HOUR)'
+            . ' ORDER BY `id_mp_transaction` DESC LIMIT 1',
+            [
+                $cartId,
+                MPTransactionRepository::WEBHOOK_ORDER_CREATION_RESERVATION_PREFIX . '%',
+                MPTransactionRepository::ORDER_CREATION_UNCERTAIN_PREFIX . '%',
+                $maxAgeHours,
+            ]
+        )->fetchAll(\PDO::FETCH_ASSOC);
+
+        return $rows[0] ?? null;
+    }
+
     public function saveSnapshot(int $transactionId, string $preferenceId, array $snapshot): void
     {
         $sets = ['`guard_preference_id` = ?', '`guard_status` = \'open\'', '`guard_updated_at` = NOW()'];

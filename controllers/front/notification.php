@@ -148,8 +148,11 @@ class MercadoPagoNotificationModuleFrontController extends ModuleFrontController
             );
             $this->respond(404);
         } catch (NotificationRetryableException $e) {
+            // The underlying cause is logged by the service after its rollback. Payment activity
+            // identifiers never reach this log: no notification id, and digits are masked (PPSP-1604).
             PrestaShopLogger::addLog(
-                '[MP Notification] Retryable processing error',
+                '[MP Notification] Retryable processing error: '
+                . mb_substr((string) preg_replace(['/[\x00-\x1F\x7F]+/u', '/\d+/'], [' ', '#'], $e->getMessage()), 0, 300),
                 2,
                 null,
                 'MPNotification',
